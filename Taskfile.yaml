@@ -1,0 +1,65 @@
+version: "3"
+
+tasks:
+  test:
+    cmds:
+      - go test -v ./...
+
+  mig-new:
+    cmds:
+      - task: mig-new-internal
+        vars:
+          MIGRATION_DIR_PATH: ./internal/adapters/db/cockroach/migrations
+          SCHEMA_NAME: ${SCHEMA_NAME}
+
+  mig-up:
+    cmds:
+      - task: mig-up-internal
+        vars:
+          MIGRATION_DIR_PATH: ./internal/adapters/db/cockroach/migrations
+          DATABASE_URL: postgresql://postgres:postgres@db:5432/chatmap?sslmode=disable
+
+  mig-down:
+    cmds:
+      - task: mig-down-internal
+        vars:
+          MIGRATION_DIR_PATH: ./internal/adapters/db/cockroach/migrations
+          DATABASE_URL: postgresql://postgres:postgres@db:5432/chatmap?sslmode=disable
+
+  sqlc:
+    vars:
+      SQLC_CONFIG_PATH: ./sqlc.yaml
+    cmds:
+      - sqlc generate -f {{.SQLC_CONFIG_PATH}}
+
+  mock-port:
+    - task: mock-gen-internal
+      vars:
+        SOURCE_FILE_PATH: ./internal/application/ports.go
+        DESTINATION_MOCK_PATH: ./internal/mock/ports.go
+
+  # Internal Commands
+
+  mock-gen-internal:
+    internal: true
+    desc: "generate mock files for testing"
+    cmds:
+      - mockgen -source {{.SOURCE_FILE_PATH}} -destination {{.DESTINATION_MOCK_PATH}} -package mock
+
+  mig-new-internal:
+    internal: true
+    desc: "create a new migration file in the given directory with the given schema name"
+    cmds:
+      - migrate create -ext sql -dir {{.MIGRATION_DIR_PATH}} -seq ${SCHEMA_NAME}
+
+  mig-up-internal:
+    internal: true
+    desc: "migrate up the whole database schema"
+    cmds:
+      - migrate -source "file://{{.MIGRATION_DIR_PATH}}" -database {{.DATABASE_URL}} up
+
+  mig-down-internal:
+    internal: true
+    desc: "migrate down the whole database schema"
+    cmds:
+      - migrate -source "file://{{.MIGRATION_DIR_PATH}}" -database {{.DATABASE_URL}} down
