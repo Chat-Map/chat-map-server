@@ -16,7 +16,7 @@ func TestStoreMessageCommandImplV1Execute(t *testing.T) {
 	tests := []struct {
 		name  string
 		args  args
-		check func(messageID int32, err error)
+		check func(t *testing.T, messageID int32, err error)
 	}{
 		// TODO: Add test cases.
 	}
@@ -24,6 +24,8 @@ func TestStoreMessageCommandImplV1Execute(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
 			v := mock.NewMockValidator(ctrl)
 			ur := mock.NewMockUserRepository(ctrl)
 			sr := mock.NewMockSessionsRepository(ctrl)
@@ -33,7 +35,7 @@ func TestStoreMessageCommandImplV1Execute(t *testing.T) {
 			s := NewStoreMessageCommandImplV1(v, ur, cr, mr, sr)
 
 			got, err := s.Execute(context.TODO(), tt.args.params)
-			tt.check(got, err)
+			tt.check(t, got, err)
 		})
 	}
 }

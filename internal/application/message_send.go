@@ -56,7 +56,7 @@ func (s StoreMessageCommandImplV1) Execute(ctx context.Context, params StoreMess
 		return 0, err
 	}
 	if !isMember {
-		return 0, fmt.Errorf("user %d is not a member of chat %d", params.UserID, params.ChatID)
+		return 0, errNotChatMember(params.ChatID, payload.UserID)
 	}
 	// Store message
 	id, err := s.mr.StoreMessage(ctx, params.ChatID, core.Message{
