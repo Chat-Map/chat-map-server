@@ -33,6 +33,11 @@ type PasswordHasher interface {
 	Compare(ctx context.Context, hash, password string) bool
 }
 
+type Tokenizer interface {
+	GenerateToken(ctx context.Context, payload core.Payload) (string, error)
+	ValidateToken(ctx context.Context, token string) (core.Payload, error)
+}
+
 type Server interface {
 	Run(ctx context.Context, port string) error
 }
