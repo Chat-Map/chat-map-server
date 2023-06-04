@@ -3,17 +3,20 @@ package core
 import "time"
 
 type User struct {
-	ID        string    `json:"id"`
+	ID        int32     `json:"id"`
 	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
+	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type UserBySearch struct {
-	UserID    string `json:"user_id"`
+	ID        int32  `json:"id"`
 	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 }
 
 type UserWithToken struct {
