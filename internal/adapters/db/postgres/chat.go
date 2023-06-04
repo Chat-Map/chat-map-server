@@ -105,6 +105,32 @@ func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([
 	return metadata, nil
 }
 
+func (cr *ChatRepository) IsChatMember(ctx context.Context, chatID int32, userID int32) (bool, error) {
+	// Begin tx
+	tx, err := cr.db.Begin()
+	if err != nil {
+		return false, errorTxNotStarted(err)
+	}
+	defer rollback(tx)
+	// DO
+	row, err := cr.q.GetChatUserRow(ctx, tx, sqlc.GetChatUserRowParams{
+		ChatID: chatID,
+		UserID: userID,
+	})
+	if err != nil {
+		return false, fmt.Errorf("failed to get chat member row: %+v", err)
+	}
+	if row.ChatID == 0 || row.UserID == 0 {
+		return false, nil
+	}
+	// Commit
+	err = tx.Commit()
+	if err != nil {
+		return false, errorTxCommitted(err)
+	}
+	return true, nil
+}
+
 func convertMessage(m sqlc.Message) core.Message {
 	return core.Message{
 		ID:        m.ID,

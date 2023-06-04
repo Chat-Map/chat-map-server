@@ -16,12 +16,13 @@ type Querier interface {
 	GetAllUsers(ctx context.Context, db DBTX) ([]GetAllUsersRow, error)
 	GetChatMembers(ctx context.Context, db DBTX, chatID int32) ([]int32, error)
 	GetChatMessages(ctx context.Context, db DBTX, chatID int32) ([]Message, error)
+	GetChatUserRow(ctx context.Context, db DBTX, arg GetChatUserRowParams) (ChatUser, error)
 	GetSession(ctx context.Context, db DBTX, id uuid.UUID) (Session, error)
 	GetUserByEmail(ctx context.Context, db DBTX, email string) (User, error)
 	GetUserByID(ctx context.Context, db DBTX, id int32) (User, error)
 	GetUserChatMetadata(ctx context.Context, db DBTX, id int32) ([]GetUserChatMetadataRow, error)
 	SearchUserByEmail(ctx context.Context, db DBTX, email string) ([]User, error)
-	StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) error
+	StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) (int32, error)
 	StoreSession(ctx context.Context, db DBTX, arg StoreSessionParams) error
 	StoreUser(ctx context.Context, db DBTX, arg StoreUserParams) error
 }

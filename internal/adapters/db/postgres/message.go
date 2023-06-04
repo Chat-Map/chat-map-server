@@ -19,26 +19,26 @@ func NewMessageRepository(db *sql.DB) *MessageRepository {
 }
 
 // StoreMessage implements application.MessageRepository
-func (mr *MessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) error {
+func (mr *MessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) (int32, error) {
 	// Begin tx
 	tx, err := mr.db.Begin()
 	if err != nil {
-		return errorTxNotStarted(err)
+		return 0, errorTxNotStarted(err)
 	}
 	defer rollback(tx)
 	// Do
-	err = mr.q.StoreMessage(ctx, tx, sqlc.StoreMessageParams{
+	id, err := mr.q.StoreMessage(ctx, tx, sqlc.StoreMessageParams{
 		ChatID:   chatID,
 		SenderID: message.SenderID,
 		Content:  message.Content,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to store message: %+v", err)
+		return 0, fmt.Errorf("failed to store message: %+v", err)
 	}
 	// Commit
 	err = tx.Commit()
 	if err != nil {
-		return errorTxCommitted(err)
+		return 0, errorTxCommitted(err)
 	}
-	return nil
+	return id, nil
 }

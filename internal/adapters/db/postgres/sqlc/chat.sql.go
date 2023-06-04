@@ -102,6 +102,25 @@ func (q *Queries) GetChatMessages(ctx context.Context, db DBTX, chatID int32) ([
 	return items, nil
 }
 
+const getChatUserRow = `-- name: GetChatUserRow :one
+SELECT chat_id, user_id
+FROM chat_users cu
+WHERE cu.chat_id = $1
+  AND cu.user_id = $2 LIMIT 1
+`
+
+type GetChatUserRowParams struct {
+	ChatID int32 `db:"chat_id" json:"chat_id"`
+	UserID int32 `db:"user_id" json:"user_id"`
+}
+
+func (q *Queries) GetChatUserRow(ctx context.Context, db DBTX, arg GetChatUserRowParams) (ChatUser, error) {
+	row := db.QueryRowContext(ctx, getChatUserRow, arg.ChatID, arg.UserID)
+	var i ChatUser
+	err := row.Scan(&i.ChatID, &i.UserID)
+	return i, err
+}
+
 const getUserChatMetadata = `-- name: GetUserChatMetadata :many
 SELECT ch.id,
        u.first_name,
