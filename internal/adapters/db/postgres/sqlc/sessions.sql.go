@@ -3,7 +3,7 @@
 //   sqlc v1.16.0
 // source: sessions.sql
 
-package db
+package sqlc
 
 import (
 	"context"
@@ -18,8 +18,8 @@ FROM sessions
 WHERE id = $1
 `
 
-func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error) {
-	row := q.db.QueryRowContext(ctx, getSession, id)
+func (q *Queries) GetSession(ctx context.Context, db DBTX, id uuid.UUID) (Session, error) {
+	row := db.QueryRowContext(ctx, getSession, id)
 	var i Session
 	err := row.Scan(
 		&i.ID,
@@ -41,7 +41,7 @@ type StoreSessionParams struct {
 	ExpiresAt time.Time `db:"expires_at" json:"expires_at"`
 }
 
-func (q *Queries) StoreSession(ctx context.Context, arg StoreSessionParams) error {
-	_, err := q.db.ExecContext(ctx, storeSession, arg.ID, arg.UserID, arg.ExpiresAt)
+func (q *Queries) StoreSession(ctx context.Context, db DBTX, arg StoreSessionParams) error {
+	_, err := db.ExecContext(ctx, storeSession, arg.ID, arg.UserID, arg.ExpiresAt)
 	return err
 }

@@ -18,6 +18,10 @@ func New(url string) (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open postgres connection: %s", err)
 	}
+	// Ping postgres instance
+	if err := conn.Ping(); err != nil {
+		return nil, fmt.Errorf("failed to ping postgres instance: %s", err)
+	}
 	return conn, nil
 }
 

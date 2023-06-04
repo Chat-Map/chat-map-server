@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.16.0
 
-package db
+package sqlc
 
 import (
 	"context"
@@ -11,11 +11,18 @@ import (
 )
 
 type Querier interface {
-	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
-	GetUser(ctx context.Context, id int32) (User, error)
-	SearchUserByEmail(ctx context.Context, email string) ([]User, error)
-	StoreSession(ctx context.Context, arg StoreSessionParams) error
-	StoreUser(ctx context.Context, arg StoreUserParams) error
+	AddChatMember(ctx context.Context, db DBTX, arg AddChatMemberParams) error
+	CreateChat(ctx context.Context, db DBTX, chatType ChatT) (int32, error)
+	GetAllUsers(ctx context.Context, db DBTX) ([]GetAllUsersRow, error)
+	GetChatMembers(ctx context.Context, db DBTX, chatID int32) ([]int32, error)
+	GetChatMessages(ctx context.Context, db DBTX, chatID int32) ([]Message, error)
+	GetSession(ctx context.Context, db DBTX, id uuid.UUID) (Session, error)
+	GetUser(ctx context.Context, db DBTX, id int32) (User, error)
+	GetUserChatMetadata(ctx context.Context, db DBTX, id int32) ([]GetUserChatMetadataRow, error)
+	SearchUserByEmail(ctx context.Context, db DBTX, email string) ([]User, error)
+	StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) error
+	StoreSession(ctx context.Context, db DBTX, arg StoreSessionParams) error
+	StoreUser(ctx context.Context, db DBTX, arg StoreUserParams) error
 }
 
 var _ Querier = (*Queries)(nil)
