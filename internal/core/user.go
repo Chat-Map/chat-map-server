@@ -1,6 +1,10 @@
 package core
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type User struct {
 	ID        int32     `json:"id"`
@@ -27,7 +31,7 @@ type UserWithToken struct {
 }
 
 type Session struct {
-	ID        string    `json:"id"`
-	UserID    string    `json:"user_id"`
+	ID        uuid.UUID `json:"id"`
+	UserID    int32     `json:"user_id"`
 	ExpiresAt time.Time `json:"expires_at"`
 }

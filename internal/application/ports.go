@@ -4,11 +4,13 @@ import (
 	"context"
 
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/google/uuid"
 )
 
 type UserRepository interface {
 	StoreUser(ctx context.Context, user core.User) error
 	GetUser(ctx context.Context, userID int32) (core.User, error)
+	GetByEmail(ctx context.Context, email string) (core.User, error)
 	GetAllUsers(ctx context.Context) ([]core.UserBySearch, error)
 	SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error)
 }
@@ -25,7 +27,7 @@ type MessageRepository interface {
 
 type SessionsRepository interface {
 	StoreSession(ctx context.Context, session core.Session) error
-	GetSession(ctx context.Context, sessionID string) (core.Session, error)
+	GetSession(ctx context.Context, sessionID uuid.UUID) (core.Session, error)
 }
 
 type PasswordHasher interface {
@@ -36,6 +38,10 @@ type PasswordHasher interface {
 type Tokenizer interface {
 	GenerateToken(ctx context.Context, payload core.Payload) (string, error)
 	ValidateToken(ctx context.Context, token string) (core.Payload, error)
+}
+
+type Validator interface {
+	Validate(ctx context.Context, data interface{}) error
 }
 
 type Server interface {
