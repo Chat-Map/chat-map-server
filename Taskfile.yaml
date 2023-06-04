@@ -9,22 +9,22 @@ tasks:
     cmds:
       - task: mig-new-internal
         vars:
-          MIGRATION_DIR_PATH: ./internal/adapters/db/cockroach/migrations
+          MIGRATION_DIR_PATH: ./internal/adapters/db/postgres/migrations
           SCHEMA_NAME: ${SCHEMA_NAME}
 
   mig-up:
     cmds:
       - task: mig-up-internal
         vars:
-          MIGRATION_DIR_PATH: ./internal/adapters/db/cockroach/migrations
-          DATABASE_URL: postgresql://postgres:postgres@db:5432/chatmap?sslmode=disable
+          MIGRATION_DIR_PATH: ./internal/adapters/db/postgres/migrations
+          DATABASE_URL: cockroach://root@localhost:26257/chatmap?sslmode=disable
 
   mig-down:
     cmds:
       - task: mig-down-internal
         vars:
-          MIGRATION_DIR_PATH: ./internal/adapters/db/cockroach/migrations
-          DATABASE_URL: postgresql://postgres:postgres@db:5432/chatmap?sslmode=disable
+          MIGRATION_DIR_PATH: ./internal/adapters/db/postgres/migrations
+          DATABASE_URL: cockroach://root@localhost:26257/chatmap?sslmode=disable
 
   sqlc:
     vars:

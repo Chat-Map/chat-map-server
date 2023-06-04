@@ -8,26 +8,29 @@ import (
 
 type UserRepository interface {
 	StoreUser(ctx context.Context, user core.User) error
-	GetUser(ctx context.Context, userID string) (core.User, error)
-	SearchUser(ctx context.Context, userID string) ([]core.UserBySearch, error)
+	GetUser(ctx context.Context, userID int32) (core.User, error)
+	GetAllUsers(ctx context.Context) ([]core.UserBySearch, error)
+	SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error)
 }
 
 type ChatRepository interface {
-	CreateChat(ctx context.Context, userID1 string, userID2 string) error
-	GetChat(ctx context.Context, chatID string) (core.Chat, error)
-	GetChatsMetadata(ctx context.Context, usersID string) ([]core.ChatMetaData, error)
+	GetChat(ctx context.Context, chatID int32) (core.Chat, error)
+	CreatePrivateChat(ctx context.Context, userIDs []int32) error
+	GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error)
 }
 
 type MessageRepository interface {
-	StoreMessage(ctx context.Context, chatID string, message core.Message) error
-	GetMessage(ctx context.Context, chatID string, messageID int) (core.Message, error)
-	GetMessages(ctx context.Context, chatID string) ([]core.Message, error)
+	StoreMessage(ctx context.Context, chatID int32, message core.Message) error
 }
 
 type SessionsRepository interface {
 	StoreSession(ctx context.Context, session core.Session) error
 	GetSession(ctx context.Context, sessionID string) (core.Session, error)
-	DeleteSession(ctx context.Context, sessionID string) error
+}
+
+type PasswordHasher interface {
+	Hash(ctx context.Context, password string) (string, error)
+	Compare(ctx context.Context, hash, password string) bool
 }
 
 type Server interface {
