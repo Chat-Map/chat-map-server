@@ -45,14 +45,36 @@ func (q *Queries) GetAllUsers(ctx context.Context, db DBTX) ([]GetAllUsersRow, e
 	return items, nil
 }
 
-const getUser = `-- name: GetUser :one
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, first_name, last_name, phone, email, password, created_at, updated_at
+FROM users
+WHERE email = $1
+`
+
+func (q *Queries) GetUserByEmail(ctx context.Context, db DBTX, email string) (User, error) {
+	row := db.QueryRowContext(ctx, getUserByEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Phone,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getUserByID = `-- name: GetUserByID :one
 SELECT id, first_name, last_name, phone, email, password, created_at, updated_at
 FROM users
 WHERE id = $1
 `
 
-func (q *Queries) GetUser(ctx context.Context, db DBTX, id int32) (User, error) {
-	row := db.QueryRowContext(ctx, getUser, id)
+func (q *Queries) GetUserByID(ctx context.Context, db DBTX, id int32) (User, error) {
+	row := db.QueryRowContext(ctx, getUserByID, id)
 	var i User
 	err := row.Scan(
 		&i.ID,

@@ -27,7 +27,29 @@ func (ur *UserRepository) GetUser(ctx context.Context, userID int32) (core.User,
 	}
 	defer rollback(tx)
 	// Do
-	res, err := ur.q.GetUser(ctx, tx, userID)
+	res, err := ur.q.GetUserByID(ctx, tx, userID)
+	if err != nil {
+		return core.User{}, fmt.Errorf("failed to get user: %w", err)
+	}
+	// Commit
+	err = tx.Commit()
+	if err != nil {
+		return core.User{}, errorTxCommitted(err)
+	}
+	// Return
+	u := convertUser(res)
+	return u, nil
+}
+
+func (ur *UserRepository) GetByEmail(ctx context.Context, email string) (core.User, error) {
+	// Begin tx
+	tx, err := ur.db.Begin()
+	if err != nil {
+		return core.User{}, errorTxNotStarted(err)
+	}
+	defer rollback(tx)
+	// Do
+	res, err := ur.q.GetUserByEmail(ctx, tx, email)
 	if err != nil {
 		return core.User{}, fmt.Errorf("failed to get user: %w", err)
 	}
