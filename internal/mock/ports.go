@@ -177,6 +177,21 @@ func (mr *MockChatRepositoryMockRecorder) GetChatsMetadata(ctx, userID interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatsMetadata", reflect.TypeOf((*MockChatRepository)(nil).GetChatsMetadata), ctx, userID)
 }
 
+// IsChatMember mocks base method.
+func (m *MockChatRepository) IsChatMember(ctx context.Context, chatID, userID int32) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsChatMember", ctx, chatID, userID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsChatMember indicates an expected call of IsChatMember.
+func (mr *MockChatRepositoryMockRecorder) IsChatMember(ctx, chatID, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsChatMember", reflect.TypeOf((*MockChatRepository)(nil).IsChatMember), ctx, chatID, userID)
+}
+
 // MockMessageRepository is a mock of MessageRepository interface.
 type MockMessageRepository struct {
 	ctrl     *gomock.Controller
@@ -201,11 +216,12 @@ func (m *MockMessageRepository) EXPECT() *MockMessageRepositoryMockRecorder {
 }
 
 // StoreMessage mocks base method.
-func (m *MockMessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) error {
+func (m *MockMessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) (int32, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StoreMessage", ctx, chatID, message)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(int32)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // StoreMessage indicates an expected call of StoreMessage.

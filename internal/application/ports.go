@@ -19,10 +19,11 @@ type ChatRepository interface {
 	GetChat(ctx context.Context, chatID int32) (core.Chat, error)
 	CreatePrivateChat(ctx context.Context, userIDs []int32) error
 	GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error)
+	IsChatMember(ctx context.Context, chatID int32, userID int32) (bool, error)
 }
 
 type MessageRepository interface {
-	StoreMessage(ctx context.Context, chatID int32, message core.Message) error
+	StoreMessage(ctx context.Context, chatID int32, message core.Message) (int32, error)
 }
 
 type SessionsRepository interface {
