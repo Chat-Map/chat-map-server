@@ -15,7 +15,7 @@ func NewBcryptHasher() *BcryptHasher {
 	return &BcryptHasher{}
 }
 
-func (c *BcryptHasher) Hash(ctx context.Context, password string) (string, error) {
+func (c *BcryptHasher) Hash(_ context.Context, password string) (string, error) {
 	if password == "" {
 		return "", fmt.Errorf("password length is less than %d", minPasswordLen)
 	}
@@ -26,6 +26,6 @@ func (c *BcryptHasher) Hash(ctx context.Context, password string) (string, error
 	return string(hash), nil
 }
 
-func (c *BcryptHasher) Compare(ctx context.Context, hash, password string) bool {
+func (c *BcryptHasher) Compare(_ context.Context, hash, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) == nil
 }
