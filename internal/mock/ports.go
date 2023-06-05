@@ -134,11 +134,12 @@ func (m *MockChatRepository) EXPECT() *MockChatRepositoryMockRecorder {
 }
 
 // CreatePrivateChat mocks base method.
-func (m *MockChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) error {
+func (m *MockChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) (int32, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePrivateChat", ctx, userIDs)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(int32)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreatePrivateChat indicates an expected call of CreatePrivateChat.
@@ -448,15 +449,15 @@ func (m *MockServer) EXPECT() *MockServerMockRecorder {
 }
 
 // Run mocks base method.
-func (m *MockServer) Run(ctx context.Context, port string) error {
+func (m *MockServer) Run(port string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Run", ctx, port)
+	ret := m.ctrl.Call(m, "Run", port)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Run indicates an expected call of Run.
-func (mr *MockServerMockRecorder) Run(ctx, port interface{}) *gomock.Call {
+func (mr *MockServerMockRecorder) Run(port interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockServer)(nil).Run), ctx, port)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockServer)(nil).Run), port)
 }

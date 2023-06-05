@@ -17,7 +17,7 @@ type UserRepository interface {
 
 type ChatRepository interface {
 	GetChat(ctx context.Context, chatID int32) (core.Chat, error)
-	CreatePrivateChat(ctx context.Context, userIDs []int32) error
+	CreatePrivateChat(ctx context.Context, userIDs []int32) (int32, error)
 	GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error)
 	IsChatMember(ctx context.Context, chatID int32, userID int32) (bool, error)
 }
@@ -46,5 +46,5 @@ type Validator interface {
 }
 
 type Server interface {
-	Run(ctx context.Context, port string) error
+	Run(port string) error
 }

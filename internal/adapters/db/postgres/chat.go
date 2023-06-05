@@ -19,30 +19,30 @@ func NewChatRepository(db *sql.DB) *ChatRepository {
 }
 
 // CreatePrivateChat implements application.ChatRepository
-func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) error {
+func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) (int32, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
-		return errorTxNotStarted(err)
+		return 0, errorTxNotStarted(err)
 	}
 	defer rollback(tx)
 	// DO
 	id, err := cr.q.CreateChat(ctx, tx, sqlc.ChatTPrivate)
 	if err != nil {
-		return fmt.Errorf("failed to create chat: %+v", err)
+		return 0, fmt.Errorf("failed to create chat: %+v", err)
 	}
 	for _, uID := range userIDs {
 		err = cr.q.AddChatMember(ctx, tx, sqlc.AddChatMemberParams{ChatID: id, UserID: uID})
 		if err != nil {
-			return fmt.Errorf("failed to add chat member: %+v", err)
+			return 0, fmt.Errorf("failed to add chat member: %+v", err)
 		}
 	}
 	// Commit
 	err = tx.Commit()
 	if err != nil {
-		return errorTxCommitted(err)
+		return 0, errorTxCommitted(err)
 	}
-	return nil
+	return id, nil
 }
 
 // GetChat implements application.ChatRepository

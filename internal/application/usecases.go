@@ -9,7 +9,13 @@ type UseCase struct {
 	Command
 }
 
-type Command struct{}
+type Command struct {
+	Signin     SigninCommand
+	Signup     SignupCommand
+	ChatGet    GetChatCommand
+	ChatCreate CreateChatCommand
+	ChatMeta   GetChatMetaCommand
+}
 
 type UseCaseOption func(*UseCase)
 
@@ -18,6 +24,7 @@ func NewUseCase(opts ...UseCaseOption) *UseCase {
 	for _, opt := range opts {
 		opt(uc)
 	}
+	uc.Command = Command{}
 	return uc
 }
 
