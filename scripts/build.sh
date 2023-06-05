@@ -10,5 +10,5 @@ if [ $# -eq 1 ]; then
     TAG=$1
 fi
 
-docker build -t dekuyo/chatmap:$TAG -f ./Dockerfile --target production .
-docker push dekuyo/chatmap:$TAG
+docker build -t dekuyo/chatmap-server:$TAG -f ./Dockerfile --target production .
+docker push dekuyo/chatmap-server:$TAG
