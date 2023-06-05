@@ -52,7 +52,7 @@ func (s SigninCommandImplV1) Execute(ctx context.Context, params SigninCommandRe
 		return SigninCommandResponse{}, err
 	}
 	// Compare passwords
-	similar := s.ph.Compare(ctx, params.Password, user.Password)
+	similar := s.ph.Compare(ctx, user.Password, params.Password)
 	if !similar {
 		return SigninCommandResponse{}, fmt.Errorf("incorrect password")
 	}

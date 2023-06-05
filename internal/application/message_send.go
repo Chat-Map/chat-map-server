@@ -22,7 +22,6 @@ type StoreMessageCommandImplV1 struct {
 	ur UserRepository
 	cr ChatRepository
 	mr MessageRepository
-	sr SessionsRepository
 }
 
 func NewStoreMessageCommandImplV1(
@@ -30,9 +29,8 @@ func NewStoreMessageCommandImplV1(
 	ur UserRepository,
 	cr ChatRepository,
 	mr MessageRepository,
-	sr SessionsRepository,
 ) StoreMessageCommand {
-	return StoreMessageCommandImplV1{v: v, ur: ur, cr: cr, mr: mr, sr: sr}
+	return StoreMessageCommandImplV1{v: v, ur: ur, cr: cr, mr: mr}
 }
 
 func (s StoreMessageCommandImplV1) Execute(ctx context.Context, params StoreMessageCommandRequest) (int64, error) {

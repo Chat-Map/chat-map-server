@@ -28,11 +28,10 @@ func TestStoreMessageCommandImplV1Execute(t *testing.T) {
 
 			v := mock.NewMockValidator(ctrl)
 			ur := mock.NewMockUserRepository(ctrl)
-			sr := mock.NewMockSessionsRepository(ctrl)
 			cr := mock.NewMockChatRepository(ctrl)
 			mr := mock.NewMockMessageRepository(ctrl)
 
-			s := NewStoreMessageCommandImplV1(v, ur, cr, mr, sr)
+			s := NewStoreMessageCommandImplV1(v, ur, cr, mr)
 
 			got, err := s.Execute(context.TODO(), tt.args.params)
 			tt.check(t, got, err)
