@@ -12,17 +12,17 @@ import (
 
 type Querier interface {
 	AddChatMember(ctx context.Context, db DBTX, arg AddChatMemberParams) error
-	CreateChat(ctx context.Context, db DBTX, chatType ChatT) (int32, error)
+	CreateChat(ctx context.Context, db DBTX, chatType ChatT) (int64, error)
 	GetAllUsers(ctx context.Context, db DBTX) ([]GetAllUsersRow, error)
-	GetChatMembers(ctx context.Context, db DBTX, chatID int32) ([]int32, error)
-	GetChatMessages(ctx context.Context, db DBTX, chatID int32) ([]Message, error)
+	GetChatMembers(ctx context.Context, db DBTX, chatID int64) ([]int64, error)
+	GetChatMessages(ctx context.Context, db DBTX, chatID int64) ([]Message, error)
 	GetChatUserRow(ctx context.Context, db DBTX, arg GetChatUserRowParams) (ChatUser, error)
 	GetSession(ctx context.Context, db DBTX, id uuid.UUID) (Session, error)
 	GetUserByEmail(ctx context.Context, db DBTX, email string) (User, error)
-	GetUserByID(ctx context.Context, db DBTX, id int32) (User, error)
-	GetUserChatMetadata(ctx context.Context, db DBTX, id int32) ([]GetUserChatMetadataRow, error)
+	GetUserByID(ctx context.Context, db DBTX, id int64) (User, error)
+	GetUserChatMetadata(ctx context.Context, db DBTX, id int64) ([]GetUserChatMetadataRow, error)
 	SearchUserByEmail(ctx context.Context, db DBTX, email string) ([]User, error)
-	StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) (int32, error)
+	StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) (int64, error)
 	StoreSession(ctx context.Context, db DBTX, arg StoreSessionParams) error
 	StoreUser(ctx context.Context, db DBTX, arg StoreUserParams) error
 }

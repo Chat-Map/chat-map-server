@@ -19,7 +19,7 @@ func NewMessageRepository(db *sql.DB) *MessageRepository {
 }
 
 // StoreMessage implements application.MessageRepository
-func (mr *MessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) (int32, error) {
+func (mr *MessageRepository) StoreMessage(ctx context.Context, chatID int64, message core.Message) (int64, error) {
 	// Begin tx
 	tx, err := mr.db.Begin()
 	if err != nil {

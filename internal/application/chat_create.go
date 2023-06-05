@@ -5,11 +5,11 @@ import (
 )
 
 type CreateChatCommandRequest struct {
-	UserID int32 `validate:"required" json:"user_id"`
+	UserID int64 `validate:"required" json:"user_id"`
 }
 
 type CreateChatCommand interface {
-	Execute(ctx context.Context, params CreateChatCommandRequest) (int32, error)
+	Execute(ctx context.Context, params CreateChatCommandRequest) (int64, error)
 }
 
 type CreateChatCommandImplV1 struct {
@@ -21,7 +21,7 @@ func NewCreateChatCommandImplV1(v Validator, cr ChatRepository) CreateChatComman
 	return CreateChatCommandImplV1{v: v, cr: cr}
 }
 
-func (s CreateChatCommandImplV1) Execute(ctx context.Context, params CreateChatCommandRequest) (int32, error) {
+func (s CreateChatCommandImplV1) Execute(ctx context.Context, params CreateChatCommandRequest) (int64, error) {
 	// Validate
 	err := s.v.Validate(ctx, params)
 	if err != nil {
@@ -33,7 +33,7 @@ func (s CreateChatCommandImplV1) Execute(ctx context.Context, params CreateChatC
 		return 0, err
 	}
 	// Create chat
-	id, err := s.cr.CreatePrivateChat(ctx, []int32{params.UserID, payload.UserID})
+	id, err := s.cr.CreatePrivateChat(ctx, []int64{params.UserID, payload.UserID})
 	if err != nil {
 		return 0, err
 	}

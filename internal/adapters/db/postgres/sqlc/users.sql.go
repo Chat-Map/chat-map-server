@@ -17,7 +17,7 @@ FROM users
 `
 
 type GetAllUsersRow struct {
-	ID        int32  `db:"id" json:"id"`
+	ID        int64  `db:"id" json:"id"`
 	FirstName string `db:"first_name" json:"first_name"`
 	LastName  string `db:"last_name" json:"last_name"`
 }
@@ -73,7 +73,7 @@ FROM users
 WHERE id = $1
 `
 
-func (q *Queries) GetUserByID(ctx context.Context, db DBTX, id int32) (User, error) {
+func (q *Queries) GetUserByID(ctx context.Context, db DBTX, id int64) (User, error) {
 	row := db.QueryRowContext(ctx, getUserByID, id)
 	var i User
 	err := row.Scan(
@@ -128,14 +128,15 @@ func (q *Queries) SearchUserByEmail(ctx context.Context, db DBTX, email string) 
 }
 
 const storeUser = `-- name: StoreUser :exec
-INSERT INTO users (first_name, last_name, email, password)
-VALUES ($1, $2, $3, $4)
+INSERT INTO users (first_name, last_name, phone, email, password)
+VALUES ($1, $2, $3, $4, $5)
 RETURNING id
 `
 
 type StoreUserParams struct {
 	FirstName string `db:"first_name" json:"first_name"`
 	LastName  string `db:"last_name" json:"last_name"`
+	Phone     string `db:"phone" json:"phone"`
 	Email     string `db:"email" json:"email"`
 	Password  string `db:"password" json:"password"`
 }
@@ -144,6 +145,7 @@ func (q *Queries) StoreUser(ctx context.Context, db DBTX, arg StoreUserParams) e
 	_, err := db.ExecContext(ctx, storeUser,
 		arg.FirstName,
 		arg.LastName,
+		arg.Phone,
 		arg.Email,
 		arg.Password,
 	)

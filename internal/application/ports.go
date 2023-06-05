@@ -9,21 +9,21 @@ import (
 
 type UserRepository interface {
 	StoreUser(ctx context.Context, user core.User) error
-	GetUser(ctx context.Context, userID int32) (core.User, error)
+	GetUser(ctx context.Context, userID int64) (core.User, error)
 	GetByEmail(ctx context.Context, email string) (core.User, error)
 	GetAllUsers(ctx context.Context) ([]core.UserBySearch, error)
 	SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error)
 }
 
 type ChatRepository interface {
-	GetChat(ctx context.Context, chatID int32) (core.Chat, error)
-	CreatePrivateChat(ctx context.Context, userIDs []int32) (int32, error)
-	GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error)
-	IsChatMember(ctx context.Context, chatID int32, userID int32) (bool, error)
+	GetChat(ctx context.Context, chatID int64) (core.Chat, error)
+	CreatePrivateChat(ctx context.Context, userIDs []int64) (int64, error)
+	GetChatsMetadata(ctx context.Context, userID int64) ([]core.ChatMetaData, error)
+	IsChatMember(ctx context.Context, chatID int64, userID int64) (bool, error)
 }
 
 type MessageRepository interface {
-	StoreMessage(ctx context.Context, chatID int32, message core.Message) (int32, error)
+	StoreMessage(ctx context.Context, chatID int64, message core.Message) (int64, error)
 }
 
 type SessionsRepository interface {

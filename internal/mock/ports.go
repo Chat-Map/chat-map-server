@@ -67,7 +67,7 @@ func (mr *MockUserRepositoryMockRecorder) GetByEmail(ctx, email interface{}) *go
 }
 
 // GetUser mocks base method.
-func (m *MockUserRepository) GetUser(ctx context.Context, userID int32) (core.User, error) {
+func (m *MockUserRepository) GetUser(ctx context.Context, userID int64) (core.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUser", ctx, userID)
 	ret0, _ := ret[0].(core.User)
@@ -134,10 +134,10 @@ func (m *MockChatRepository) EXPECT() *MockChatRepositoryMockRecorder {
 }
 
 // CreatePrivateChat mocks base method.
-func (m *MockChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) (int32, error) {
+func (m *MockChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int64) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePrivateChat", ctx, userIDs)
-	ret0, _ := ret[0].(int32)
+	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -149,7 +149,7 @@ func (mr *MockChatRepositoryMockRecorder) CreatePrivateChat(ctx, userIDs interfa
 }
 
 // GetChat mocks base method.
-func (m *MockChatRepository) GetChat(ctx context.Context, chatID int32) (core.Chat, error) {
+func (m *MockChatRepository) GetChat(ctx context.Context, chatID int64) (core.Chat, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChat", ctx, chatID)
 	ret0, _ := ret[0].(core.Chat)
@@ -164,7 +164,7 @@ func (mr *MockChatRepositoryMockRecorder) GetChat(ctx, chatID interface{}) *gomo
 }
 
 // GetChatsMetadata mocks base method.
-func (m *MockChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error) {
+func (m *MockChatRepository) GetChatsMetadata(ctx context.Context, userID int64) ([]core.ChatMetaData, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChatsMetadata", ctx, userID)
 	ret0, _ := ret[0].([]core.ChatMetaData)
@@ -179,7 +179,7 @@ func (mr *MockChatRepositoryMockRecorder) GetChatsMetadata(ctx, userID interface
 }
 
 // IsChatMember mocks base method.
-func (m *MockChatRepository) IsChatMember(ctx context.Context, chatID, userID int32) (bool, error) {
+func (m *MockChatRepository) IsChatMember(ctx context.Context, chatID, userID int64) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsChatMember", ctx, chatID, userID)
 	ret0, _ := ret[0].(bool)
@@ -217,10 +217,10 @@ func (m *MockMessageRepository) EXPECT() *MockMessageRepositoryMockRecorder {
 }
 
 // StoreMessage mocks base method.
-func (m *MockMessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) (int32, error) {
+func (m *MockMessageRepository) StoreMessage(ctx context.Context, chatID int64, message core.Message) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StoreMessage", ctx, chatID, message)
-	ret0, _ := ret[0].(int32)
+	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

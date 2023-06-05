@@ -15,8 +15,8 @@ VALUES ($1, $2)
 `
 
 type AddChatMemberParams struct {
-	ChatID int32 `db:"chat_id" json:"chat_id"`
-	UserID int32 `db:"user_id" json:"user_id"`
+	ChatID int64 `db:"chat_id" json:"chat_id"`
+	UserID int64 `db:"user_id" json:"user_id"`
 }
 
 func (q *Queries) AddChatMember(ctx context.Context, db DBTX, arg AddChatMemberParams) error {
@@ -30,9 +30,9 @@ VALUES ($1)
 RETURNING id
 `
 
-func (q *Queries) CreateChat(ctx context.Context, db DBTX, chatType ChatT) (int32, error) {
+func (q *Queries) CreateChat(ctx context.Context, db DBTX, chatType ChatT) (int64, error) {
 	row := db.QueryRowContext(ctx, createChat, chatType)
-	var id int32
+	var id int64
 	err := row.Scan(&id)
 	return id, err
 }
@@ -43,15 +43,15 @@ FROM "chat_users" cu
 WHERE cu.chat_id = $1
 `
 
-func (q *Queries) GetChatMembers(ctx context.Context, db DBTX, chatID int32) ([]int32, error) {
+func (q *Queries) GetChatMembers(ctx context.Context, db DBTX, chatID int64) ([]int64, error) {
 	rows, err := db.QueryContext(ctx, getChatMembers, chatID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []int32{}
+	items := []int64{}
 	for rows.Next() {
-		var user_id int32
+		var user_id int64
 		if err := rows.Scan(&user_id); err != nil {
 			return nil, err
 		}
@@ -73,7 +73,7 @@ WHERE m.chat_id = $1
 ORDER BY m.created_at DESC
 `
 
-func (q *Queries) GetChatMessages(ctx context.Context, db DBTX, chatID int32) ([]Message, error) {
+func (q *Queries) GetChatMessages(ctx context.Context, db DBTX, chatID int64) ([]Message, error) {
 	rows, err := db.QueryContext(ctx, getChatMessages, chatID)
 	if err != nil {
 		return nil, err
@@ -110,8 +110,8 @@ WHERE cu.chat_id = $1
 `
 
 type GetChatUserRowParams struct {
-	ChatID int32 `db:"chat_id" json:"chat_id"`
-	UserID int32 `db:"user_id" json:"user_id"`
+	ChatID int64 `db:"chat_id" json:"chat_id"`
+	UserID int64 `db:"user_id" json:"user_id"`
 }
 
 func (q *Queries) GetChatUserRow(ctx context.Context, db DBTX, arg GetChatUserRowParams) (ChatUser, error) {
@@ -133,13 +133,13 @@ WHERE u.id = $1
 `
 
 type GetUserChatMetadataRow struct {
-	ID        int32  `db:"id" json:"id"`
+	ID        int64  `db:"id" json:"id"`
 	FirstName string `db:"first_name" json:"first_name"`
 	LastName  string `db:"last_name" json:"last_name"`
 	Content   string `db:"content" json:"content"`
 }
 
-func (q *Queries) GetUserChatMetadata(ctx context.Context, db DBTX, id int32) ([]GetUserChatMetadataRow, error) {
+func (q *Queries) GetUserChatMetadata(ctx context.Context, db DBTX, id int64) ([]GetUserChatMetadataRow, error) {
 	rows, err := db.QueryContext(ctx, getUserChatMetadata, id)
 	if err != nil {
 		return nil, err

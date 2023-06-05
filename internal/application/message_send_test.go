@@ -16,7 +16,7 @@ func TestStoreMessageCommandImplV1Execute(t *testing.T) {
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, messageID int32, err error)
+		check func(t *testing.T, messageID int64, err error)
 	}{
 		// TODO: Add test cases.
 	}

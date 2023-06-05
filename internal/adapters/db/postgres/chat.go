@@ -19,7 +19,7 @@ func NewChatRepository(db *sql.DB) *ChatRepository {
 }
 
 // CreatePrivateChat implements application.ChatRepository
-func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) (int32, error) {
+func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int64) (int64, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
@@ -46,7 +46,7 @@ func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32
 }
 
 // GetChat implements application.ChatRepository
-func (cr *ChatRepository) GetChat(ctx context.Context, chatID int32) (core.Chat, error) {
+func (cr *ChatRepository) GetChat(ctx context.Context, chatID int64) (core.Chat, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
@@ -80,7 +80,7 @@ func (cr *ChatRepository) GetChat(ctx context.Context, chatID int32) (core.Chat,
 }
 
 // GetChatMetadata implements application.ChatRepository
-func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error) {
+func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int64) ([]core.ChatMetaData, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
@@ -105,7 +105,7 @@ func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([
 	return metadata, nil
 }
 
-func (cr *ChatRepository) IsChatMember(ctx context.Context, chatID int32, userID int32) (bool, error) {
+func (cr *ChatRepository) IsChatMember(ctx context.Context, chatID int64, userID int64) (bool, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {

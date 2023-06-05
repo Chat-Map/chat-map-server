@@ -75,32 +75,32 @@ func AllChatTValues() []ChatT {
 }
 
 type Chat struct {
-	ID       int32 `db:"id" json:"id"`
+	ID       int64 `db:"id" json:"id"`
 	ChatType ChatT `db:"chat_type" json:"chat_type"`
 }
 
 type ChatUser struct {
-	ChatID int32 `db:"chat_id" json:"chat_id"`
-	UserID int32 `db:"user_id" json:"user_id"`
+	ChatID int64 `db:"chat_id" json:"chat_id"`
+	UserID int64 `db:"user_id" json:"user_id"`
 }
 
 type Message struct {
-	ID        int32     `db:"id" json:"id"`
-	ChatID    int32     `db:"chat_id" json:"chat_id"`
-	SenderID  int32     `db:"sender_id" json:"sender_id"`
+	ID        int64     `db:"id" json:"id"`
+	ChatID    int64     `db:"chat_id" json:"chat_id"`
+	SenderID  int64     `db:"sender_id" json:"sender_id"`
 	Content   string    `db:"content" json:"content"`
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 }
 
 type Session struct {
 	ID        uuid.UUID    `db:"id" json:"id"`
-	UserID    int32        `db:"user_id" json:"user_id"`
+	UserID    int64        `db:"user_id" json:"user_id"`
 	ExpiresAt time.Time    `db:"expires_at" json:"expires_at"`
 	CreatedAt sql.NullTime `db:"created_at" json:"created_at"`
 }
 
 type User struct {
-	ID        int32        `db:"id" json:"id"`
+	ID        int64        `db:"id" json:"id"`
 	FirstName string       `db:"first_name" json:"first_name"`
 	LastName  string       `db:"last_name" json:"last_name"`
 	Phone     string       `db:"phone" json:"phone"`

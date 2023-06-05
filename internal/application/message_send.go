@@ -8,13 +8,13 @@ import (
 )
 
 type StoreMessageCommandRequest struct {
-	ChatID  int32  `validate:"required" json:"chat_id"`
-	UserID  int32  `validate:"required" json:"user_id"`
+	ChatID  int64  `validate:"required" json:"chat_id"`
+	UserID  int64  `validate:"required" json:"user_id"`
 	Content string `validate:"required" json:"content"`
 }
 
 type StoreMessageCommand interface {
-	Execute(ctx context.Context, params StoreMessageCommandRequest) (int32, error)
+	Execute(ctx context.Context, params StoreMessageCommandRequest) (int64, error)
 }
 
 type StoreMessageCommandImplV1 struct {
@@ -35,7 +35,7 @@ func NewStoreMessageCommandImplV1(
 	return StoreMessageCommandImplV1{v: v, ur: ur, cr: cr, mr: mr, sr: sr}
 }
 
-func (s StoreMessageCommandImplV1) Execute(ctx context.Context, params StoreMessageCommandRequest) (int32, error) {
+func (s StoreMessageCommandImplV1) Execute(ctx context.Context, params StoreMessageCommandRequest) (int64, error) {
 	// Validate
 	err := s.v.Validate(ctx, params)
 	if err != nil {
