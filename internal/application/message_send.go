@@ -8,9 +8,9 @@ import (
 )
 
 type StoreMessageCommandRequest struct {
-	ChatID  int32  `validate:"required"`
-	UserID  int32  `validate:"required"`
-	Content string `validate:"required"`
+	ChatID  int32  `validate:"required" json:"chat_id"`
+	UserID  int32  `validate:"required" json:"user_id"`
+	Content string `validate:"required" json:"content"`
 }
 
 type StoreMessageCommand interface {

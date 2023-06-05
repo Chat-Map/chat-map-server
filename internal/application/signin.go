@@ -10,8 +10,8 @@ import (
 )
 
 type SigninCommandRequest struct {
-	Email    string `validate:"required,email"`
-	Password string `validate:"required,min=8"`
+	Email    string `validate:"required,email" json:"email"`
+	Password string `validate:"required,min=8" json:"password"`
 }
 
 var (

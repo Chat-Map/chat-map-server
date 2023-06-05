@@ -5,7 +5,7 @@ import (
 )
 
 type CreateChatCommandRequest struct {
-	UserID int32 `validate:"required"`
+	UserID int32 `validate:"required" json:"user_id"`
 }
 
 type CreateChatCommand interface {
