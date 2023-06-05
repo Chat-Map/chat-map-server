@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: "app"
+    restart: unless-stopped
+    volumes:
+      - ./cmd:/go/src/github.com/chatmap/server/cmd
+      - ./internal:/go/src/github.com/chatmap/server/internal
+    environment:
+      - APP_PORT=${APP_PORT}
+      - TOKEN_SECRET=${TOKEN_SECRET}
+      - ACCESS_TOKEN_DURATION=${ACCESS_TOKEN_DURATION}
+      - REFRESH_TOKEN_DURATION=${REFRESH_TOKEN_DURATION}
+      - USER_SESSION_DURATION=${USER_SESSION_DURATION}
+      - DATABASE_MIGRATION_PATH=${DATABASE_MIGRATION_PATH}
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: cockroachdb/cockroach:latest
+    container_name: "db"
+    volumes:
+      - db:/cockroach/cockroach-data
+      - ./scripts/cockroach-init.sh:/cockroach-init.sh
+    entrypoint: ["/bin/bash"]
+    command: ["/cockroach-init.sh"]
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "cockroach", "node", "status", "--insecure" ]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+
+volumes:
+  db:
