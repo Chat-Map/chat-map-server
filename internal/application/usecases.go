@@ -19,6 +19,7 @@ type Command struct {
 	ChatGet       GetChatCommand
 	ChatCreate    CreateChatCommand
 	ChatMeta      GetChatMetaCommand
+	MessageStore  StoreMessageCommand
 	ValidateToken TokenValidateCommand
 }
 
@@ -30,11 +31,15 @@ func NewUseCase(opts ...UseCaseOption) *UseCase {
 		opt(uc)
 	}
 	uc.Command = Command{
-		Signin:        NewSigninCommandImplV1(uc.v, uc.ur, uc.sr, uc.ph, uc.tk),
-		Signup:        NewSignupCommandImplV1(uc.v, uc.ur, uc.ph),
-		ChatGet:       NewGetChatCommandImplV1(uc.v, uc.cr),
-		ChatCreate:    NewCreateChatCommandImplV1(uc.v, uc.cr),
-		ChatMeta:      NewGetChatMetaCommandImplV1(uc.cr),
+		Signin: NewSigninCommandImplV1(uc.v, uc.ur, uc.sr, uc.ph, uc.tk),
+		Signup: NewSignupCommandImplV1(uc.v, uc.ur, uc.ph),
+
+		ChatGet:    NewGetChatCommandImplV1(uc.v, uc.cr),
+		ChatCreate: NewCreateChatCommandImplV1(uc.v, uc.cr),
+		ChatMeta:   NewGetChatMetaCommandImplV1(uc.cr),
+
+		MessageStore: NewStoreMessageCommandImplV1(uc.v, uc.ur, uc.cr, uc.mr),
+
 		ValidateToken: NewTokenValidateCommandImplV1(uc.v, uc.tk),
 	}
 	return uc
