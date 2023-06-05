@@ -17,7 +17,7 @@ func TestSigninCommandImplV1Execute(t *testing.T) {
 		name  string
 		args  args
 		want  SigninCommandResponse
-		check func(res SigninCommandResponse, err error)
+		check func(t *testing.T, res SigninCommandResponse, err error)
 	}{
 		// TODO: Add test cases.
 	}
@@ -25,6 +25,8 @@ func TestSigninCommandImplV1Execute(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
 			v := mock.NewMockValidator(ctrl)
 			ur := mock.NewMockUserRepository(ctrl)
 			sr := mock.NewMockSessionsRepository(ctrl)
@@ -34,7 +36,7 @@ func TestSigninCommandImplV1Execute(t *testing.T) {
 			s := NewSigninCommandImplV1(v, ur, sr, ph, tk)
 
 			got, err := s.Execute(context.TODO(), tt.args.params)
-			tt.check(got, err)
+			tt.check(t, got, err)
 		})
 	}
 }

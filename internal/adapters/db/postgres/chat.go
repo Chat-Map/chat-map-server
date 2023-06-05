@@ -19,34 +19,34 @@ func NewChatRepository(db *sql.DB) *ChatRepository {
 }
 
 // CreatePrivateChat implements application.ChatRepository
-func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) error {
+func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int64) (int64, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
-		return errorTxNotStarted(err)
+		return 0, errorTxNotStarted(err)
 	}
 	defer rollback(tx)
 	// DO
 	id, err := cr.q.CreateChat(ctx, tx, sqlc.ChatTPrivate)
 	if err != nil {
-		return fmt.Errorf("failed to create chat: %+v", err)
+		return 0, fmt.Errorf("failed to create chat: %+v", err)
 	}
 	for _, uID := range userIDs {
 		err = cr.q.AddChatMember(ctx, tx, sqlc.AddChatMemberParams{ChatID: id, UserID: uID})
 		if err != nil {
-			return fmt.Errorf("failed to add chat member: %+v", err)
+			return 0, fmt.Errorf("failed to add chat member: %+v", err)
 		}
 	}
 	// Commit
 	err = tx.Commit()
 	if err != nil {
-		return errorTxCommitted(err)
+		return 0, errorTxCommitted(err)
 	}
-	return nil
+	return id, nil
 }
 
 // GetChat implements application.ChatRepository
-func (cr *ChatRepository) GetChat(ctx context.Context, chatID int32) (core.Chat, error) {
+func (cr *ChatRepository) GetChat(ctx context.Context, chatID int64) (core.Chat, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
@@ -80,7 +80,7 @@ func (cr *ChatRepository) GetChat(ctx context.Context, chatID int32) (core.Chat,
 }
 
 // GetChatMetadata implements application.ChatRepository
-func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error) {
+func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int64) ([]core.ChatMetaData, error) {
 	// Begin tx
 	tx, err := cr.db.Begin()
 	if err != nil {
@@ -103,6 +103,32 @@ func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([
 		metadata[i] = convertMetadata(m)
 	}
 	return metadata, nil
+}
+
+func (cr *ChatRepository) IsChatMember(ctx context.Context, chatID int64, userID int64) (bool, error) {
+	// Begin tx
+	tx, err := cr.db.Begin()
+	if err != nil {
+		return false, errorTxNotStarted(err)
+	}
+	defer rollback(tx)
+	// DO
+	row, err := cr.q.GetChatUserRow(ctx, tx, sqlc.GetChatUserRowParams{
+		ChatID: chatID,
+		UserID: userID,
+	})
+	if err != nil {
+		return false, fmt.Errorf("failed to get chat member row: %+v", err)
+	}
+	if row.ChatID == 0 || row.UserID == 0 {
+		return false, nil
+	}
+	// Commit
+	err = tx.Commit()
+	if err != nil {
+		return false, errorTxCommitted(err)
+	}
+	return true, nil
 }
 
 func convertMessage(m sqlc.Message) core.Message {

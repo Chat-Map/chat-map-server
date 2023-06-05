@@ -37,7 +37,7 @@ VALUES ($1, $2, $3)
 
 type StoreSessionParams struct {
 	ID        uuid.UUID `db:"id" json:"id"`
-	UserID    int32     `db:"user_id" json:"user_id"`
+	UserID    int64     `db:"user_id" json:"user_id"`
 	ExpiresAt time.Time `db:"expires_at" json:"expires_at"`
 }
 

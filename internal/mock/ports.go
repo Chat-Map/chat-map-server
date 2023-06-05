@@ -67,7 +67,7 @@ func (mr *MockUserRepositoryMockRecorder) GetByEmail(ctx, email interface{}) *go
 }
 
 // GetUser mocks base method.
-func (m *MockUserRepository) GetUser(ctx context.Context, userID int32) (core.User, error) {
+func (m *MockUserRepository) GetUser(ctx context.Context, userID int64) (core.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUser", ctx, userID)
 	ret0, _ := ret[0].(core.User)
@@ -134,11 +134,12 @@ func (m *MockChatRepository) EXPECT() *MockChatRepositoryMockRecorder {
 }
 
 // CreatePrivateChat mocks base method.
-func (m *MockChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int32) error {
+func (m *MockChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int64) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePrivateChat", ctx, userIDs)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreatePrivateChat indicates an expected call of CreatePrivateChat.
@@ -148,7 +149,7 @@ func (mr *MockChatRepositoryMockRecorder) CreatePrivateChat(ctx, userIDs interfa
 }
 
 // GetChat mocks base method.
-func (m *MockChatRepository) GetChat(ctx context.Context, chatID int32) (core.Chat, error) {
+func (m *MockChatRepository) GetChat(ctx context.Context, chatID int64) (core.Chat, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChat", ctx, chatID)
 	ret0, _ := ret[0].(core.Chat)
@@ -163,7 +164,7 @@ func (mr *MockChatRepositoryMockRecorder) GetChat(ctx, chatID interface{}) *gomo
 }
 
 // GetChatsMetadata mocks base method.
-func (m *MockChatRepository) GetChatsMetadata(ctx context.Context, userID int32) ([]core.ChatMetaData, error) {
+func (m *MockChatRepository) GetChatsMetadata(ctx context.Context, userID int64) ([]core.ChatMetaData, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChatsMetadata", ctx, userID)
 	ret0, _ := ret[0].([]core.ChatMetaData)
@@ -175,6 +176,21 @@ func (m *MockChatRepository) GetChatsMetadata(ctx context.Context, userID int32)
 func (mr *MockChatRepositoryMockRecorder) GetChatsMetadata(ctx, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChatsMetadata", reflect.TypeOf((*MockChatRepository)(nil).GetChatsMetadata), ctx, userID)
+}
+
+// IsChatMember mocks base method.
+func (m *MockChatRepository) IsChatMember(ctx context.Context, chatID, userID int64) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsChatMember", ctx, chatID, userID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsChatMember indicates an expected call of IsChatMember.
+func (mr *MockChatRepositoryMockRecorder) IsChatMember(ctx, chatID, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsChatMember", reflect.TypeOf((*MockChatRepository)(nil).IsChatMember), ctx, chatID, userID)
 }
 
 // MockMessageRepository is a mock of MessageRepository interface.
@@ -201,11 +217,12 @@ func (m *MockMessageRepository) EXPECT() *MockMessageRepositoryMockRecorder {
 }
 
 // StoreMessage mocks base method.
-func (m *MockMessageRepository) StoreMessage(ctx context.Context, chatID int32, message core.Message) error {
+func (m *MockMessageRepository) StoreMessage(ctx context.Context, chatID int64, message core.Message) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StoreMessage", ctx, chatID, message)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // StoreMessage indicates an expected call of StoreMessage.
@@ -432,15 +449,15 @@ func (m *MockServer) EXPECT() *MockServerMockRecorder {
 }
 
 // Run mocks base method.
-func (m *MockServer) Run(ctx context.Context, port string) error {
+func (m *MockServer) Run(port string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Run", ctx, port)
+	ret := m.ctrl.Call(m, "Run", port)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Run indicates an expected call of Run.
-func (mr *MockServerMockRecorder) Run(ctx, port interface{}) *gomock.Call {
+func (mr *MockServerMockRecorder) Run(port interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockServer)(nil).Run), ctx, port)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockServer)(nil).Run), port)
 }

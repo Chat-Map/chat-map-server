@@ -1,6 +1,6 @@
 -- name: StoreUser :exec
-INSERT INTO users (first_name, last_name, email, password)
-VALUES ($1, $2, $3, $4)
+INSERT INTO users (first_name, last_name, phone, email, password)
+VALUES ($1, $2, $3, $4, $5)
 RETURNING id;
 
 -- name: GetUserByID :one

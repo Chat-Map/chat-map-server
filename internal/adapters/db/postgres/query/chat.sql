@@ -7,6 +7,12 @@ RETURNING id;
 INSERT INTO chat_users(chat_id, user_id)
 VALUES ($1, $2);
 
+-- name: GetChatUserRow :one
+SELECT *
+FROM chat_users cu
+WHERE cu.chat_id = $1
+  AND cu.user_id = $2 LIMIT 1;
+
 -- name: GetChatMessages :many
 SELECT *
 FROM "messages" m

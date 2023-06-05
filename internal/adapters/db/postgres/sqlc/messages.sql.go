@@ -9,18 +9,21 @@ import (
 	"context"
 )
 
-const storeMessage = `-- name: StoreMessage :exec
+const storeMessage = `-- name: StoreMessage :one
 INSERT INTO messages(chat_id, sender_id, content)
 VALUES ($1, $2, $3)
+RETURNING id
 `
 
 type StoreMessageParams struct {
-	ChatID   int32  `db:"chat_id" json:"chat_id"`
-	SenderID int32  `db:"sender_id" json:"sender_id"`
+	ChatID   int64  `db:"chat_id" json:"chat_id"`
+	SenderID int64  `db:"sender_id" json:"sender_id"`
 	Content  string `db:"content" json:"content"`
 }
 
-func (q *Queries) StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) error {
-	_, err := db.ExecContext(ctx, storeMessage, arg.ChatID, arg.SenderID, arg.Content)
-	return err
+func (q *Queries) StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) (int64, error) {
+	row := db.QueryRowContext(ctx, storeMessage, arg.ChatID, arg.SenderID, arg.Content)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
 }

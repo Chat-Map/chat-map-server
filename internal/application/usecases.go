@@ -1,6 +1,10 @@
 package application
 
 type UseCase struct {
+	v  Validator
+	ph PasswordHasher
+	tk Tokenizer
+
 	ur UserRepository
 	sr SessionsRepository
 	cr ChatRepository
@@ -9,7 +13,14 @@ type UseCase struct {
 	Command
 }
 
-type Command struct{}
+type Command struct {
+	Signin        SigninCommand
+	Signup        SignupCommand
+	ChatGet       GetChatCommand
+	ChatCreate    CreateChatCommand
+	ChatMeta      GetChatMetaCommand
+	ValidateToken TokenValidateCommand
+}
 
 type UseCaseOption func(*UseCase)
 
@@ -17,6 +28,14 @@ func NewUseCase(opts ...UseCaseOption) *UseCase {
 	uc := &UseCase{}
 	for _, opt := range opts {
 		opt(uc)
+	}
+	uc.Command = Command{
+		Signin:        NewSigninCommandImplV1(uc.v, uc.ur, uc.sr, uc.ph, uc.tk),
+		Signup:        NewSignupCommandImplV1(uc.v, uc.ur, uc.ph),
+		ChatGet:       NewGetChatCommandImplV1(uc.v, uc.cr),
+		ChatCreate:    NewCreateChatCommandImplV1(uc.v, uc.cr),
+		ChatMeta:      NewGetChatMetaCommandImplV1(uc.cr),
+		ValidateToken: NewTokenValidateCommandImplV1(uc.v, uc.tk),
 	}
 	return uc
 }
@@ -42,5 +61,23 @@ func WithChatRepository(cr ChatRepository) UseCaseOption {
 func WithMessageRepository(mr MessageRepository) UseCaseOption {
 	return func(uc *UseCase) {
 		uc.mr = mr
+	}
+}
+
+func WithPasswordHasher(p PasswordHasher) UseCaseOption {
+	return func(uc *UseCase) {
+		uc.ph = p
+	}
+}
+
+func WithValidator(v Validator) UseCaseOption {
+	return func(uc *UseCase) {
+		uc.v = v
+	}
+}
+
+func WithTokenizer(t Tokenizer) UseCaseOption {
+	return func(uc *UseCase) {
+		uc.tk = t
 	}
 }

@@ -8,15 +8,15 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-func TestSignupCommandImplV1Execute(t *testing.T) {
+func TestCreateChatCommandImplV1Execute(t *testing.T) {
 	type args struct {
-		params SignupCommandRequest
+		params CreateChatCommandRequest
 	}
 
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, err error)
+		check func(t *testing.T, id int64, err error)
 	}{
 		// TODO: Add test cases.
 	}
@@ -27,13 +27,12 @@ func TestSignupCommandImplV1Execute(t *testing.T) {
 			defer ctrl.Finish()
 
 			v := mock.NewMockValidator(ctrl)
-			ur := mock.NewMockUserRepository(ctrl)
-			ph := mock.NewMockPasswordHasher(ctrl)
+			cr := mock.NewMockChatRepository(ctrl)
 
-			s := NewSignupCommandImplV1(v, ur, ph)
+			s := NewCreateChatCommandImplV1(v, cr)
 
-			err := s.Execute(context.TODO(), tt.args.params)
-			tt.check(t, err)
+			id, err := s.Execute(context.TODO(), tt.args.params)
+			tt.check(t, id, err)
 		})
 	}
 }

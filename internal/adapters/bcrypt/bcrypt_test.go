@@ -1,4 +1,4 @@
-package hasher
+package bcrypt
 
 import (
 	"context"
@@ -12,7 +12,7 @@ func TestBcryptHash(t *testing.T) {
 	var hash string
 
 	ctx := context.Background()
-	c := NewBcryptHasher()
+	c := New()
 	// Hash the password
 	hash, err = c.Hash(ctx, "password")
 	require.NoError(t, err)

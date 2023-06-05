@@ -1,4 +1,4 @@
-package hasher
+package bcrypt
 
 import (
 	"context"
@@ -11,7 +11,7 @@ const minPasswordLen = 8
 
 type BcryptHasher struct{}
 
-func NewBcryptHasher() *BcryptHasher {
+func New() *BcryptHasher {
 	return &BcryptHasher{}
 }
 

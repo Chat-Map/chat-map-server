@@ -4,36 +4,34 @@ import (
 	"context"
 	"testing"
 
+	"github.com/Chat-Map/chat-map-server/internal/core"
 	"github.com/Chat-Map/chat-map-server/internal/mock"
 	"github.com/golang/mock/gomock"
 )
 
-func TestSignupCommandImplV1Execute(t *testing.T) {
+func TestTokenValidateCommandImplV1Execute(t *testing.T) {
 	type args struct {
-		params SignupCommandRequest
+		params TokenValidateCommandRequest
 	}
-
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, err error)
+		check func(t *testing.T, c core.Payload, err error)
 	}{
 		// TODO: Add test cases.
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
 			v := mock.NewMockValidator(ctrl)
-			ur := mock.NewMockUserRepository(ctrl)
-			ph := mock.NewMockPasswordHasher(ctrl)
+			tk := mock.NewMockTokenizer(ctrl)
 
-			s := NewSignupCommandImplV1(v, ur, ph)
+			s := NewTokenValidateCommandImplV1(v, tk)
 
-			err := s.Execute(context.TODO(), tt.args.params)
-			tt.check(t, err)
+			payload, err := s.Execute(context.TODO(), tt.args.params)
+			tt.check(t, payload, err)
 		})
 	}
 }

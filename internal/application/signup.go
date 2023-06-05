@@ -7,11 +7,11 @@ import (
 )
 
 type SignupCommandRequest struct {
-	FirstName string `validate:"required,alpha"`
-	LastName  string `validate:"required,alpha"`
-	Phone     string `validate:"required,iso3166_1_alpha_numeric"`
-	Email     string `validate:"required,email"`
-	Password  string `validate:"required,min=8"`
+	FirstName string `validate:"required,alpha" json:"first_name"`
+	LastName  string `validate:"required,alpha" json:"last_name"`
+	Phone     string `validate:"required,e164" json:"phone"`
+	Email     string `validate:"required,email" json:"email"`
+	Password  string `validate:"required,min=8" json:"password"`
 }
 
 type SignupCommand interface {

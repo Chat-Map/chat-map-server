@@ -19,7 +19,7 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 }
 
 // GetUser implements application.UserRepository
-func (ur *UserRepository) GetUser(ctx context.Context, userID int32) (core.User, error) {
+func (ur *UserRepository) GetUser(ctx context.Context, userID int64) (core.User, error) {
 	// Begin tx
 	tx, err := ur.db.Begin()
 	if err != nil {
@@ -120,6 +120,7 @@ func (ur *UserRepository) StoreUser(ctx context.Context, user core.User) error {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 		Email:     user.Email,
+		Phone:     user.Phone,
 		Password:  user.Password,
 	})
 	if err != nil {

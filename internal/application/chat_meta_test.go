@@ -4,19 +4,20 @@ import (
 	"context"
 	"testing"
 
+	"github.com/Chat-Map/chat-map-server/internal/core"
 	"github.com/Chat-Map/chat-map-server/internal/mock"
 	"github.com/golang/mock/gomock"
 )
 
-func TestSignupCommandImplV1Execute(t *testing.T) {
+func TestGetChatMetaCommandImplV1Execute(t *testing.T) {
 	type args struct {
-		params SignupCommandRequest
+		params GetChatMetaCommandRequest
 	}
 
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, err error)
+		check func(t *testing.T, metadata []core.ChatMetaData, err error)
 	}{
 		// TODO: Add test cases.
 	}
@@ -26,14 +27,12 @@ func TestSignupCommandImplV1Execute(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
-			v := mock.NewMockValidator(ctrl)
-			ur := mock.NewMockUserRepository(ctrl)
-			ph := mock.NewMockPasswordHasher(ctrl)
+			cr := mock.NewMockChatRepository(ctrl)
 
-			s := NewSignupCommandImplV1(v, ur, ph)
+			s := NewGetChatMetaCommandImplV1(cr)
 
-			err := s.Execute(context.TODO(), tt.args.params)
-			tt.check(t, err)
+			metadata, err := s.Execute(context.TODO(), tt.args.params)
+			tt.check(t, metadata, err)
 		})
 	}
 }
