@@ -2,8 +2,8 @@ package bcrypt
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/lordvidex/errs"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,11 +17,11 @@ func New() *BcryptHasher {
 
 func (c *BcryptHasher) Hash(_ context.Context, password string) (string, error) {
 	if password == "" {
-		return "", fmt.Errorf("password length is less than %d", minPasswordLen)
+		return "", errs.B().Code(errs.InvalidArgument).Msgf("password length is less than: %d", minPasswordLen).Err()
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return "", fmt.Errorf("failed to hash password: %w", err)
+		return "", errs.B(err).Code(errs.Unauthenticated).Msg("failed to hash password:").Err()
 	}
 	return string(hash), nil
 }

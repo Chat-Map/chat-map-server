@@ -2,10 +2,10 @@ package paseto
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/lordvidex/errs"
 	"github.com/o1egl/paseto"
 )
 
@@ -20,7 +20,7 @@ type PasetoTokenizer struct {
 func NewPaseto(secretKey []byte) (*PasetoTokenizer, error) {
 	// Check that secret key is exactly equal to `minSecretKeyLen`
 	if len(secretKey) < minSecretKeyLen {
-		return nil, fmt.Errorf("secretKey len is less than the min value %d", minSecretKeyLen)
+		return nil, errs.B().Code(errs.InvalidArgument).Msgf("secretKey len is less than the min value %d", minSecretKeyLen).Err()
 	}
 	// Return a new paseto tokenizer
 	return &PasetoTokenizer{p: paseto.NewV2(), sk: secretKey}, nil
@@ -30,7 +30,7 @@ func NewPaseto(secretKey []byte) (*PasetoTokenizer, error) {
 func (pt *PasetoTokenizer) GenerateToken(ctx context.Context, payload core.Payload) (string, error) {
 	token, err := pt.p.Encrypt(pt.sk, payload, nil)
 	if err != nil {
-		return "", fmt.Errorf("failed to create token: %+v", err)
+		return "", errs.B(err).Code(errs.Internal).Msg("failed to create token").Err()
 	}
 	return token, nil
 }
@@ -40,10 +40,10 @@ func (pt *PasetoTokenizer) ValidateToken(ctx context.Context, token string) (cor
 	var payload core.Payload
 	err := pt.p.Decrypt(token, pt.sk, &payload, nil)
 	if err != nil {
-		return core.Payload{}, fmt.Errorf("failed to decrypt token: %+v", err)
+		return core.Payload{}, errs.B(err).Code(errs.Internal).Msg("failed to decrypt token").Err()
 	}
 	if payload.ExpiresAt.Before(time.Now()) {
-		return core.Payload{}, fmt.Errorf("token has expired")
+		return core.Payload{}, errs.B().Code(errs.Unauthenticated).Msg("token has expired").Err()
 	}
 	return payload, nil
 }

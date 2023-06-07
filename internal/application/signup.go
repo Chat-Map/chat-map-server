@@ -63,6 +63,9 @@ func (s SignupCommandImplV1) Execute(ctx context.Context, params SignupCommandRe
 		Email:    params.Email,
 		Password: params.Password,
 	})
+	if err != nil {
+		return SignupCommandResponse{}, err
+	}
 	return SignupCommandResponse{
 		User:         response.User,
 		AccessToken:  response.AccessToken,
