@@ -21,3 +21,7 @@ type Message struct {
 	SenderID  int64     `json:"sender_id"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type NotifyChat struct {
+	ChatID int64 `json:"chat_id"`
+}

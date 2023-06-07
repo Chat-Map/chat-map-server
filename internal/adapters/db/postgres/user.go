@@ -89,7 +89,7 @@ func (ur *UserRepository) GetAllUsers(ctx context.Context) ([]core.UserBySearch,
 }
 
 // SearchUser implements application.UserRepository
-func (ur *UserRepository) SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error) {
+func (ur *UserRepository) SearchUserByAll(ctx context.Context, pattern string) ([]core.UserBySearch, error) {
 	// Begin tx
 	tx, err := ur.db.Begin()
 	if err != nil {
@@ -97,14 +97,21 @@ func (ur *UserRepository) SearchUserByEmail(ctx context.Context, email string) (
 	}
 	defer rollback(tx)
 	// Do
-
+	rows, err := ur.q.SearchUserByAll(ctx, tx, pattern)
+	if err != nil {
+		return nil, fmt.Errorf("failed to search for users: %w", err)
+	}
 	// Commit
 	err = tx.Commit()
 	if err != nil {
 		return nil, errorTxCommitted(err)
 	}
-
-	return nil, nil
+	// Return
+	users := make([]core.UserBySearch, len(rows))
+	for i, u := range rows {
+		users[i] = convertUserBySearchAll(u)
+	}
+	return users, nil
 }
 
 // StoreUser implements application.UserRepository
@@ -149,6 +156,14 @@ func convertUser(u sqlc.User) core.User {
 }
 
 func convertUserBySearch(u sqlc.GetAllUsersRow) core.UserBySearch {
+	return core.UserBySearch{
+		ID:        u.ID,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+	}
+}
+
+func convertUserBySearchAll(u sqlc.SearchUserByAllRow) core.UserBySearch {
 	return core.UserBySearch{
 		ID:        u.ID,
 		FirstName: u.FirstName,

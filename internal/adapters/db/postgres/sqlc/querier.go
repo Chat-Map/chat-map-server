@@ -21,7 +21,7 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, db DBTX, email string) (User, error)
 	GetUserByID(ctx context.Context, db DBTX, id int64) (User, error)
 	GetUserChatMetadata(ctx context.Context, db DBTX, id int64) ([]GetUserChatMetadataRow, error)
-	SearchUserByEmail(ctx context.Context, db DBTX, email string) ([]User, error)
+	SearchUserByAll(ctx context.Context, db DBTX, pattern string) ([]SearchUserByAllRow, error)
 	StoreMessage(ctx context.Context, db DBTX, arg StoreMessageParams) (int64, error)
 	StoreSession(ctx context.Context, db DBTX, arg StoreSessionParams) error
 	StoreUser(ctx context.Context, db DBTX, arg StoreUserParams) error

@@ -89,30 +89,38 @@ func (q *Queries) GetUserByID(ctx context.Context, db DBTX, id int64) (User, err
 	return i, err
 }
 
-const searchUserByEmail = `-- name: SearchUserByEmail :many
-SELECT id, first_name, last_name, phone, email, password, created_at, updated_at
+const searchUserByAll = `-- name: SearchUserByAll :many
+SELECT id, first_name, last_name, phone, email
 FROM users
-WHERE email LIKE $1
+WHERE email LIKE $1::varchar+'%'
+   OR first_name LIKE $1::varchar+'%'
+   OR last_name LIKE $1::varchar+'%'
+   OR phone LIKE $1::varchar+'%'
 `
 
-func (q *Queries) SearchUserByEmail(ctx context.Context, db DBTX, email string) ([]User, error) {
-	rows, err := db.QueryContext(ctx, searchUserByEmail, email)
+type SearchUserByAllRow struct {
+	ID        int64  `db:"id" json:"id"`
+	FirstName string `db:"first_name" json:"first_name"`
+	LastName  string `db:"last_name" json:"last_name"`
+	Phone     string `db:"phone" json:"phone"`
+	Email     string `db:"email" json:"email"`
+}
+
+func (q *Queries) SearchUserByAll(ctx context.Context, db DBTX, pattern string) ([]SearchUserByAllRow, error) {
+	rows, err := db.QueryContext(ctx, searchUserByAll, pattern)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []User{}
+	items := []SearchUserByAllRow{}
 	for rows.Next() {
-		var i User
+		var i SearchUserByAllRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.FirstName,
 			&i.LastName,
 			&i.Phone,
 			&i.Email,
-			&i.Password,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}

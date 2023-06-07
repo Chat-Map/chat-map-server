@@ -12,6 +12,7 @@ func (s *Server) chatGetMeta(w http.ResponseWriter, r *http.Request) {
 	metadata, err := s.uc.ChatMeta.Execute(r.Context(), application.GetChatMetaCommandRequest{})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	// Write response
