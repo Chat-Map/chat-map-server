@@ -25,10 +25,10 @@ type loginResponseDTO struct {
 
 func (loginResponseDTO) from(x application.SigninCommandResponse) loginResponseDTO {
 	return loginResponseDTO{
-		User:         x.UserWithToken.User,
-		AccessToken:  x.UserWithToken.AccessToken,
-		RefreshToken: x.UserWithToken.RefreshToken,
-		ExpiresAt:    x.UserWithToken.ExpiresAt,
+		User:         x.User,
+		AccessToken:  x.AccessToken,
+		RefreshToken: x.RefreshToken,
+		ExpiresAt:    x.ExpiresAt,
 	}
 }
 

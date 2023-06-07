@@ -35,7 +35,7 @@ func NewUseCase(opts ...UseCaseOption) *UseCase {
 	}
 	uc.Command = Command{
 		Signin: NewSigninCommandImplV1(uc.v, uc.ur, uc.sr, uc.ph, uc.tk),
-		Signup: NewSignupCommandImplV1(uc.v, uc.ur, uc.ph),
+		Signup: NewSignupCommandImplV1(uc.v, uc.ur, uc.ph, uc.Signin),
 
 		ChatGet:    NewGetChatCommandImplV1(uc.v, uc.cr),
 		ChatCreate: NewCreateChatCommandImplV1(uc.v, uc.cr, uc.cn),

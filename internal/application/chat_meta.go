@@ -9,8 +9,12 @@ import (
 type GetChatMetaCommandRequest struct {
 }
 
+type GetChatMetaCommandResponse struct {
+	ChatMetaData []core.ChatMetaData
+}
+
 type GetChatMetaCommand interface {
-	Execute(ctx context.Context, params GetChatMetaCommandRequest) ([]core.ChatMetaData, error)
+	Execute(ctx context.Context, params GetChatMetaCommandRequest) (GetChatMetaCommandResponse, error)
 }
 
 type GetChatMetaCommandImplV1 struct {
@@ -21,16 +25,16 @@ func NewGetChatMetaCommandImplV1(cr ChatRepository) GetChatMetaCommand {
 	return GetChatMetaCommandImplV1{cr: cr}
 }
 
-func (s GetChatMetaCommandImplV1) Execute(ctx context.Context, params GetChatMetaCommandRequest) ([]core.ChatMetaData, error) {
+func (s GetChatMetaCommandImplV1) Execute(ctx context.Context, params GetChatMetaCommandRequest) (GetChatMetaCommandResponse, error) {
 	// Get Payload
 	payload, err := GetPayload(ctx)
 	if err != nil {
-		return nil, err
+		return GetChatMetaCommandResponse{}, err
 	}
 	// Get user's metadata
 	metadata, err := s.cr.GetChatsMetadata(ctx, payload.UserID)
 	if err != nil {
-		return nil, err
+		return GetChatMetaCommandResponse{}, err
 	}
-	return metadata, nil
+	return GetChatMetaCommandResponse{ChatMetaData: metadata}, nil
 }
