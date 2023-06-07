@@ -5,16 +5,42 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/Chat-Map/chat-map-server/internal/application"
+	"github.com/Chat-Map/chat-map-server/internal/core"
 )
 
+type registerRequestDTO struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Phone     string `json:"phone"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}
+
+type registerResponseDTO struct {
+	User         core.User `json:"user"`
+	AccessToken  string    `json:"access_token"`
+	RefreshToken string    `json:"refresh_token"`
+	ExpiresAt    time.Time `json:"expires_at"`
+}
+
+func (registerResponseDTO) from(x application.SigninCommandResponse) registerResponseDTO {
+	return registerResponseDTO{
+		User:         x.UserWithToken.User,
+		AccessToken:  x.UserWithToken.AccessToken,
+		RefreshToken: x.UserWithToken.RefreshToken,
+		ExpiresAt:    x.UserWithToken.ExpiresAt,
+	}
+}
+
 func (s *Server) register(w http.ResponseWriter, r *http.Request) {
-	var body application.SignupCommandRequest
+	var body registerRequestDTO
 	// Read body
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		newFailureResponse("failed to read body", err).Write(w)
 		return
 	}
 	// Close body
@@ -26,16 +52,29 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 	// Unmarshal body
 	err = json.Unmarshal(bytes, &body)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		newFailureResponse("failed to unmarshal body", err).Write(w)
 		return
 	}
 	// Do request
-	err = s.uc.Signup.Execute(s.ctx, body)
+	err = s.uc.Signup.Execute(s.ctx, application.SignupCommandRequest{
+		FirstName: body.FirstName,
+		LastName:  body.LastName,
+		Phone:     body.Phone,
+		Email:     body.Email,
+		Password:  body.Password,
+	})
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		newFailureResponse("failed to execute signup", err).Write(w)
+		return
+	}
+	response, err := s.uc.Signin.Execute(s.ctx, application.SigninCommandRequest{
+		Email:    body.Email,
+		Password: body.Password,
+	})
+	if err != nil {
+		newFailureResponse("failed to execute signin", err).Write(w)
 		return
 	}
 	// Write response
-	w.WriteHeader(http.StatusOK)
+	newSuccessResponse("registered", new(registerResponseDTO).from(response)).Write(w)
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/Chat-Map/chat-map-server/internal/application"
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/lordvidex/errs"
 )
 
 const (
@@ -19,22 +20,19 @@ func (s *Server) authMW(next http.HandlerFunc) http.HandlerFunc {
 		value := r.Header.Get(authorizationHeader)
 		// Check authorization header
 		if value == "" {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("authorization header not provided"))
+			newFailureResponse("authorization header not provided", errs.B().Code(errs.Unauthenticated).Err()).Write(w)
 			return
 		}
 		// Check authorization type
 		if strings.HasPrefix(value, authorizationType+" ") {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("authorization type not provided"))
+			newFailureResponse("authorization type not provided", errs.B().Code(errs.Unauthenticated).Err()).Write(w)
 			return
 		}
 		// Validate token
 		token := value[len(authorizationType):]
 		payload, err := s.uc.ValidateToken.Execute(r.Context(), application.TokenValidateCommandRequest{Token: token})
 		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(err.Error()))
+			newFailureResponse("failed to execute", err).Write(w)
 			return
 		}
 		// Set payload into context as variable
