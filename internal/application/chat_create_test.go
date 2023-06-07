@@ -28,8 +28,9 @@ func TestCreateChatCommandImplV1Execute(t *testing.T) {
 
 			v := mock.NewMockValidator(ctrl)
 			cr := mock.NewMockChatRepository(ctrl)
+			cn := mock.NewMockChatNotifier(ctrl)
 
-			s := NewCreateChatCommandImplV1(v, cr)
+			s := NewCreateChatCommandImplV1(v, cr, cn)
 
 			id, err := s.Execute(context.TODO(), tt.args.params)
 			tt.check(t, id, err)

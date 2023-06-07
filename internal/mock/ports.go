@@ -388,6 +388,79 @@ func (mr *MockTokenizerMockRecorder) ValidateToken(ctx, token interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateToken", reflect.TypeOf((*MockTokenizer)(nil).ValidateToken), ctx, token)
 }
 
+// MockChatNotifier is a mock of ChatNotifier interface.
+type MockChatNotifier struct {
+	ctrl     *gomock.Controller
+	recorder *MockChatNotifierMockRecorder
+}
+
+// MockChatNotifierMockRecorder is the mock recorder for MockChatNotifier.
+type MockChatNotifierMockRecorder struct {
+	mock *MockChatNotifier
+}
+
+// NewMockChatNotifier creates a new mock instance.
+func NewMockChatNotifier(ctrl *gomock.Controller) *MockChatNotifier {
+	mock := &MockChatNotifier{ctrl: ctrl}
+	mock.recorder = &MockChatNotifierMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockChatNotifier) EXPECT() *MockChatNotifierMockRecorder {
+	return m.recorder
+}
+
+// Listen mocks base method.
+func (m *MockChatNotifier) Listen(ctx context.Context, address string) chan core.NotifyChat {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Listen", ctx, address)
+	ret0, _ := ret[0].(chan core.NotifyChat)
+	return ret0
+}
+
+// Listen indicates an expected call of Listen.
+func (mr *MockChatNotifierMockRecorder) Listen(ctx, address interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Listen", reflect.TypeOf((*MockChatNotifier)(nil).Listen), ctx, address)
+}
+
+// Notify mocks base method.
+func (m *MockChatNotifier) Notify(ctx context.Context, userIDs []int64, chatID int64) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Notify", ctx, userIDs, chatID)
+}
+
+// Notify indicates an expected call of Notify.
+func (mr *MockChatNotifierMockRecorder) Notify(ctx, userIDs, chatID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Notify", reflect.TypeOf((*MockChatNotifier)(nil).Notify), ctx, userIDs, chatID)
+}
+
+// Register mocks base method.
+func (m *MockChatNotifier) Register(ctx context.Context, userID int64, address string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Register", ctx, userID, address)
+}
+
+// Register indicates an expected call of Register.
+func (mr *MockChatNotifierMockRecorder) Register(ctx, userID, address interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockChatNotifier)(nil).Register), ctx, userID, address)
+}
+
+// Unregister mocks base method.
+func (m *MockChatNotifier) Unregister(ctx context.Context, userID int64, address string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Unregister", ctx, userID, address)
+}
+
+// Unregister indicates an expected call of Unregister.
+func (mr *MockChatNotifierMockRecorder) Unregister(ctx, userID, address interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Unregister", reflect.TypeOf((*MockChatNotifier)(nil).Unregister), ctx, userID, address)
+}
+
 // MockValidator is a mock of Validator interface.
 type MockValidator struct {
 	ctrl     *gomock.Controller

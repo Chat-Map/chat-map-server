@@ -4,6 +4,7 @@ type UseCase struct {
 	v  Validator
 	ph PasswordHasher
 	tk Tokenizer
+	cn ChatNotifier
 
 	ur UserRepository
 	sr SessionsRepository
@@ -14,13 +15,15 @@ type UseCase struct {
 }
 
 type Command struct {
-	Signin        SigninCommand
-	Signup        SignupCommand
-	ChatGet       GetChatCommand
-	ChatCreate    CreateChatCommand
-	ChatMeta      GetChatMetaCommand
-	MessageStore  StoreMessageCommand
-	ValidateToken TokenValidateCommand
+	Signin          SigninCommand
+	Signup          SignupCommand
+	ChatGet         GetChatCommand
+	ChatCreate      CreateChatCommand
+	ChatMeta        GetChatMetaCommand
+	MessageStore    StoreMessageCommand
+	SearchUserByAll SearchCommand
+	NotifyListen    NotifyListenCommand
+	ValidateToken   TokenValidateCommand
 }
 
 type UseCaseOption func(*UseCase)
@@ -35,10 +38,14 @@ func NewUseCase(opts ...UseCaseOption) *UseCase {
 		Signup: NewSignupCommandImplV1(uc.v, uc.ur, uc.ph),
 
 		ChatGet:    NewGetChatCommandImplV1(uc.v, uc.cr),
-		ChatCreate: NewCreateChatCommandImplV1(uc.v, uc.cr),
+		ChatCreate: NewCreateChatCommandImplV1(uc.v, uc.cr, uc.cn),
 		ChatMeta:   NewGetChatMetaCommandImplV1(uc.cr),
 
 		MessageStore: NewStoreMessageCommandImplV1(uc.v, uc.ur, uc.cr, uc.mr),
+
+		SearchUserByAll: NewSearchCommandImplV1(uc.v, uc.ur),
+
+		NotifyListen: NewNotifyListenImplV1(uc.v, uc.cn),
 
 		ValidateToken: NewTokenValidateCommandImplV1(uc.v, uc.tk),
 	}

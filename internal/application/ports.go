@@ -41,6 +41,15 @@ type Tokenizer interface {
 	ValidateToken(ctx context.Context, token string) (core.Payload, error)
 }
 
+type ChatNotifier interface {
+	Register(ctx context.Context, userID int64, address string)
+	Unregister(ctx context.Context, userID int64, address string)
+	// Notify other aobut new chat
+	Notify(ctx context.Context, userIDs []int64, chatID int64)
+	// Listen to newly created chat
+	Listen(ctx context.Context, address string) chan core.NotifyChat
+}
+
 type Validator interface {
 	Validate(ctx context.Context, data interface{}) error
 }

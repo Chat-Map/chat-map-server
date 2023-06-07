@@ -15,10 +15,11 @@ type CreateChatCommand interface {
 type CreateChatCommandImplV1 struct {
 	v  Validator
 	cr ChatRepository
+	cn ChatNotifier
 }
 
-func NewCreateChatCommandImplV1(v Validator, cr ChatRepository) CreateChatCommand {
-	return CreateChatCommandImplV1{v: v, cr: cr}
+func NewCreateChatCommandImplV1(v Validator, cr ChatRepository, cn ChatNotifier) CreateChatCommand {
+	return CreateChatCommandImplV1{v: v, cr: cr, cn: cn}
 }
 
 func (s CreateChatCommandImplV1) Execute(ctx context.Context, params CreateChatCommandRequest) (int64, error) {
@@ -33,9 +34,14 @@ func (s CreateChatCommandImplV1) Execute(ctx context.Context, params CreateChatC
 		return 0, err
 	}
 	// Create chat
-	id, err := s.cr.CreatePrivateChat(ctx, []int64{params.UserID, payload.UserID})
+	userIDs := []int64{params.UserID, payload.UserID}
+	chatID, err := s.cr.CreatePrivateChat(ctx, userIDs)
 	if err != nil {
 		return 0, err
 	}
-	return id, nil
+	// Notify users about newly created chat
+	go func() {
+		s.cn.Notify(ctx, userIDs, chatID)
+	}()
+	return chatID, nil
 }
