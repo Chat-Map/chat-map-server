@@ -31,6 +31,9 @@ func (s *Server) setup() {
 	rr.HandleFunc("/register", s.register).Methods("POST")
 	rr.HandleFunc("/login", s.login).Methods("POST")
 
+	// Search
+	rr.HandleFunc("/search/{pattern}", s.authMW(s.search)).Methods("GET") // Search for User/Group/Channel
+
 	// Chat
 	rr.HandleFunc("/chat", s.authMW(s.chatCreate)).Methods("POST")
 	rr.HandleFunc("/chat/{id}", s.authMW(s.chatGet)).Methods("GET")

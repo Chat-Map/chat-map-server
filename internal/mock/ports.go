@@ -81,19 +81,19 @@ func (mr *MockUserRepositoryMockRecorder) GetUser(ctx, userID interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockUserRepository)(nil).GetUser), ctx, userID)
 }
 
-// SearchUserByEmail mocks base method.
-func (m *MockUserRepository) SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error) {
+// SearchUserByAll mocks base method.
+func (m *MockUserRepository) SearchUserByAll(ctx context.Context, pattern string) ([]core.UserBySearch, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SearchUserByEmail", ctx, email)
+	ret := m.ctrl.Call(m, "SearchUserByAll", ctx, pattern)
 	ret0, _ := ret[0].([]core.UserBySearch)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// SearchUserByEmail indicates an expected call of SearchUserByEmail.
-func (mr *MockUserRepositoryMockRecorder) SearchUserByEmail(ctx, email interface{}) *gomock.Call {
+// SearchUserByAll indicates an expected call of SearchUserByAll.
+func (mr *MockUserRepositoryMockRecorder) SearchUserByAll(ctx, pattern interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchUserByEmail", reflect.TypeOf((*MockUserRepository)(nil).SearchUserByEmail), ctx, email)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchUserByAll", reflect.TypeOf((*MockUserRepository)(nil).SearchUserByAll), ctx, pattern)
 }
 
 // StoreUser mocks base method.

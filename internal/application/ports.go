@@ -12,7 +12,7 @@ type UserRepository interface {
 	GetUser(ctx context.Context, userID int64) (core.User, error)
 	GetByEmail(ctx context.Context, email string) (core.User, error)
 	GetAllUsers(ctx context.Context) ([]core.UserBySearch, error)
-	SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error)
+	SearchUserByAll(ctx context.Context, pattern string) ([]core.UserBySearch, error)
 }
 
 type ChatRepository interface {
