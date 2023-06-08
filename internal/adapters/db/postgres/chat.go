@@ -3,10 +3,10 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/Chat-Map/chat-map-server/internal/adapters/db/postgres/sqlc"
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/lordvidex/errs"
 )
 
 type ChatRepository struct {
@@ -29,12 +29,12 @@ func (cr *ChatRepository) CreatePrivateChat(ctx context.Context, userIDs []int64
 	// DO
 	id, err := cr.q.CreateChat(ctx, tx, sqlc.ChatTPrivate)
 	if err != nil {
-		return 0, fmt.Errorf("failed to create chat: %+v", err)
+		return 0, errs.B(err).Code(errs.NotFound).Msg("failed to create chat").Err()
 	}
 	for _, uID := range userIDs {
 		err = cr.q.AddChatMember(ctx, tx, sqlc.AddChatMemberParams{ChatID: id, UserID: uID})
 		if err != nil {
-			return 0, fmt.Errorf("failed to add chat member: %+v", err)
+			return 0, errs.B(err).Code(errs.Internal).Msg("failed to add chat member").Err()
 		}
 	}
 	// Commit
@@ -56,11 +56,11 @@ func (cr *ChatRepository) GetChat(ctx context.Context, chatID int64) (core.Chat,
 	// DO
 	messages, err := cr.q.GetChatMessages(ctx, tx, chatID)
 	if err != nil {
-		return core.Chat{}, fmt.Errorf("failed to get chat messages: %+v", err)
+		return core.Chat{}, errs.B(err).Code(errs.Internal).Msg("failed to get chat messages").Err()
 	}
 	users, err := cr.q.GetChatMembers(ctx, tx, chatID)
 	if err != nil {
-		return core.Chat{}, fmt.Errorf("failed to get chat members: %+v", err)
+		return core.Chat{}, errs.B(err).Code(errs.Internal).Msg("failed to get chat members").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -90,7 +90,7 @@ func (cr *ChatRepository) GetChatsMetadata(ctx context.Context, userID int64) ([
 	// DO
 	res, err := cr.q.GetUserChatMetadata(ctx, tx, userID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get chat metadata: %+v", err)
+		return nil, errs.B(err).Code(errs.Internal).Msg("failed to get chat metadata").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -118,10 +118,10 @@ func (cr *ChatRepository) IsChatMember(ctx context.Context, chatID int64, userID
 		UserID: userID,
 	})
 	if err != nil {
-		return false, fmt.Errorf("failed to get chat member row: %+v", err)
+		return false, errs.B(err).Code(errs.Internal).Msg("failed to get chat member row").Err()
 	}
 	if row.ChatID == 0 || row.UserID == 0 {
-		return false, nil
+		return false, errs.B().Code(errs.NotFound).Msg("chat member not found").Err()
 	}
 	// Commit
 	err = tx.Commit()

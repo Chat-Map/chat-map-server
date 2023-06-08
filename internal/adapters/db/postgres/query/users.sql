@@ -13,10 +13,13 @@ SELECT *
 FROM users
 WHERE email = $1;
 
--- name: SearchUserByEmail :many
-SELECT *
+-- name: SearchUserByAll :many
+SELECT id, first_name, last_name, phone, email
 FROM users
-WHERE email LIKE $1;
+WHERE email LIKE sqlc.arg(pattern)::varchar+'%'
+   OR first_name LIKE sqlc.arg(pattern)::varchar+'%'
+   OR last_name LIKE sqlc.arg(pattern)::varchar+'%'
+   OR phone LIKE sqlc.arg(pattern)::varchar+'%';
 
 -- name: GetAllUsers :many
 SELECT id,

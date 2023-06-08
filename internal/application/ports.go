@@ -12,7 +12,7 @@ type UserRepository interface {
 	GetUser(ctx context.Context, userID int64) (core.User, error)
 	GetByEmail(ctx context.Context, email string) (core.User, error)
 	GetAllUsers(ctx context.Context) ([]core.UserBySearch, error)
-	SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error)
+	SearchUserByAll(ctx context.Context, pattern string) ([]core.UserBySearch, error)
 }
 
 type ChatRepository interface {
@@ -39,6 +39,15 @@ type PasswordHasher interface {
 type Tokenizer interface {
 	GenerateToken(ctx context.Context, payload core.Payload) (string, error)
 	ValidateToken(ctx context.Context, token string) (core.Payload, error)
+}
+
+type ChatNotifier interface {
+	Register(ctx context.Context, userID int64, address string)
+	Unregister(ctx context.Context, userID int64, address string)
+	// Notify other aobut new chat
+	Notify(ctx context.Context, userIDs []int64, chatID int64)
+	// Listen to newly created chat
+	Listen(ctx context.Context, address string) chan core.NotifyChat
 }
 
 type Validator interface {

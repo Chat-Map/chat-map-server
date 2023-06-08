@@ -38,6 +38,11 @@ tasks:
         SOURCE_FILE_PATH: ./internal/application/ports.go
         DESTINATION_MOCK_PATH: ./internal/mock/ports.go
 
+  swagger:
+    cmds:
+      - swag fmt
+      - swag init -g ./cmd/main.go --pd -o ./docs # -d ./internal/api  --requiredByDefault true --generatedTime true
+
   # Internal Commands
 
   mock-gen-internal:

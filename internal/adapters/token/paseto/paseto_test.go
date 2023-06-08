@@ -22,6 +22,11 @@ func TestNewPaseto(t *testing.T) {
 			key:     "12345678901234567890123456789012",
 			wantErr: false,
 		},
+		{
+			name:    "small secret key",
+			key:     "123123123",
+			wantErr: true,
+		},
 	}
 
 	for _, tt := range test {
@@ -66,6 +71,11 @@ func TestPasetoTokenizerGenerateToken(t *testing.T) {
 				ExpiresAt: time.Now().Add(-time.Hour),
 				CreatedAt: time.Now(),
 			},
+			validateErr: true,
+		},
+		{
+			name:        "empty payload",
+			payload:     core.Payload{},
 			validateErr: true,
 		},
 	}

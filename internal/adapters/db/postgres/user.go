@@ -3,10 +3,10 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/Chat-Map/chat-map-server/internal/adapters/db/postgres/sqlc"
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/lordvidex/errs"
 )
 
 type UserRepository struct {
@@ -29,7 +29,7 @@ func (ur *UserRepository) GetUser(ctx context.Context, userID int64) (core.User,
 	// Do
 	res, err := ur.q.GetUserByID(ctx, tx, userID)
 	if err != nil {
-		return core.User{}, fmt.Errorf("failed to get user: %w", err)
+		return core.User{}, errs.B(err).Code(errs.NotFound).Msg("failed to get user").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -51,7 +51,7 @@ func (ur *UserRepository) GetByEmail(ctx context.Context, email string) (core.Us
 	// Do
 	res, err := ur.q.GetUserByEmail(ctx, tx, email)
 	if err != nil {
-		return core.User{}, fmt.Errorf("failed to get user: %w", err)
+		return core.User{}, errs.B(err).Code(errs.NotFound).Msg("failed to get user").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -73,7 +73,7 @@ func (ur *UserRepository) GetAllUsers(ctx context.Context) ([]core.UserBySearch,
 	// Do
 	res, err := ur.q.GetAllUsers(ctx, tx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get users: %w", err)
+		return nil, errs.B(err).Code(errs.Internal).Msg("failed to get users").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -89,7 +89,7 @@ func (ur *UserRepository) GetAllUsers(ctx context.Context) ([]core.UserBySearch,
 }
 
 // SearchUser implements application.UserRepository
-func (ur *UserRepository) SearchUserByEmail(ctx context.Context, email string) ([]core.UserBySearch, error) {
+func (ur *UserRepository) SearchUserByAll(ctx context.Context, pattern string) ([]core.UserBySearch, error) {
 	// Begin tx
 	tx, err := ur.db.Begin()
 	if err != nil {
@@ -97,14 +97,21 @@ func (ur *UserRepository) SearchUserByEmail(ctx context.Context, email string) (
 	}
 	defer rollback(tx)
 	// Do
-
+	rows, err := ur.q.SearchUserByAll(ctx, tx, pattern)
+	if err != nil {
+		return nil, errs.B(err).Code(errs.Internal).Msg("failed to search for users").Err()
+	}
 	// Commit
 	err = tx.Commit()
 	if err != nil {
 		return nil, errorTxCommitted(err)
 	}
-
-	return nil, nil
+	// Return
+	users := make([]core.UserBySearch, len(rows))
+	for i, u := range rows {
+		users[i] = convertUserBySearchAll(u)
+	}
+	return users, nil
 }
 
 // StoreUser implements application.UserRepository
@@ -124,7 +131,7 @@ func (ur *UserRepository) StoreUser(ctx context.Context, user core.User) error {
 		Password:  user.Password,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to store user: %+v", err)
+		return errs.B(err).Code(errs.Canceled).Msg("failed to store user").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -149,6 +156,14 @@ func convertUser(u sqlc.User) core.User {
 }
 
 func convertUserBySearch(u sqlc.GetAllUsersRow) core.UserBySearch {
+	return core.UserBySearch{
+		ID:        u.ID,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+	}
+}
+
+func convertUserBySearchAll(u sqlc.SearchUserByAllRow) core.UserBySearch {
 	return core.UserBySearch{
 		ID:        u.ID,
 		FirstName: u.FirstName,

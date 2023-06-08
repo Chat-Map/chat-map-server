@@ -3,21 +3,25 @@ package core
 import "time"
 
 type Chat struct {
-	ID       int64     `json:"id"`
-	UserIDs  []int64   `json:"user_id"`
-	Messages []Message `json:"messages"`
+	ID       int64
+	UserIDs  []int64
+	Messages []Message
 }
 
 type ChatMetaData struct {
-	ID            int64  `json:"id"`
-	FirstName     string `json:"first_name"`
-	LastName      string `json:"last_name"`
-	LatestMessage string `json:"latest_message"`
+	ID            int64
+	FirstName     string
+	LastName      string
+	LatestMessage string
 }
 
 type Message struct {
-	ID        int64     `json:"id"`
-	Content   string    `json:"content"`
-	SenderID  int64     `json:"sender_id"`
-	CreatedAt time.Time `json:"created_at"`
+	ID        int64
+	Content   string
+	SenderID  int64
+	CreatedAt time.Time
+}
+
+type NotifyChat struct {
+	ChatID int64
 }

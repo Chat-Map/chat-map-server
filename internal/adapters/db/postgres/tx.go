@@ -2,16 +2,17 @@ package postgres
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
+
+	"github.com/lordvidex/errs"
 )
 
 var (
 	errorTxNotStarted = func(err error) error {
-		return fmt.Errorf("failed to start transaction %+v", err)
+		return errs.B(err).Code(errs.Unauthenticated).Msg("failed to start transaction").Err()
 	}
 	errorTxCommitted = func(err error) error {
-		return fmt.Errorf("failedt to commit transaction: %+v", err)
+		return errs.B(err).Code(errs.Unauthenticated).Msg("failedt to commit transaction:").Err()
 	}
 )
 

@@ -1,9 +1,11 @@
 package application
 
-import "fmt"
+import (
+	"github.com/lordvidex/errs"
+)
 
 var (
 	errNotChatMember = func(chatID, userID int64) error {
-		return fmt.Errorf("user %d is not a member of chat %d", userID, chatID)
+		return errs.B().Code(errs.Forbidden).Msgf("user %d is not a member of chat %d", userID, chatID).Err()
 	}
 )

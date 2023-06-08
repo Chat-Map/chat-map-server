@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Chat-Map/chat-map-server/internal/core"
 	"github.com/Chat-Map/chat-map-server/internal/mock"
 	"github.com/golang/mock/gomock"
 )
@@ -17,7 +16,7 @@ func TestGetChatMetaCommandImplV1Execute(t *testing.T) {
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, metadata []core.ChatMetaData, err error)
+		check func(t *testing.T, metadata GetChatMetaCommandResponse, err error)
 	}{
 		// TODO: Add test cases.
 	}

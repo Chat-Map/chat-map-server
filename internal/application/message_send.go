@@ -2,15 +2,15 @@ package application
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/lordvidex/errs"
 )
 
 type StoreMessageCommandRequest struct {
-	ChatID  int64  `validate:"required" json:"chat_id"`
-	UserID  int64  `validate:"required" json:"user_id"`
-	Content string `validate:"required" json:"content"`
+	ChatID  int64  `validate:"required"`
+	UserID  int64  `validate:"required"`
+	Content string `validate:"required"`
 }
 
 type StoreMessageCommand interface {
@@ -46,7 +46,7 @@ func (s StoreMessageCommandImplV1) Execute(ctx context.Context, params StoreMess
 	}
 	// Check that sender is the token user
 	if payload.UserID != params.UserID {
-		return 0, fmt.Errorf("message sender id mismatch with payload")
+		return 0, errs.B().Code(errs.Forbidden).Msg("message sender id mismatch with payload").Err()
 	}
 	// Check that user is member of the chat
 	isMember, err := s.cr.IsChatMember(ctx, params.ChatID, params.UserID)

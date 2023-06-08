@@ -3,11 +3,11 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/Chat-Map/chat-map-server/internal/adapters/db/postgres/sqlc"
 	"github.com/Chat-Map/chat-map-server/internal/core"
 	"github.com/google/uuid"
+	"github.com/lordvidex/errs"
 )
 
 type SessionRepository struct {
@@ -30,7 +30,7 @@ func (sr *SessionRepository) GetSession(ctx context.Context, sessionID uuid.UUID
 	// Do
 	res, err := sr.q.GetSession(ctx, tx, sessionID)
 	if err != nil {
-		return core.Session{}, fmt.Errorf("failed to get session: %w", err)
+		return core.Session{}, errs.B(err).Code(errs.NotFound).Msg("failed to get session").Err()
 	}
 	// Commit
 	err = tx.Commit()
@@ -57,7 +57,7 @@ func (sr *SessionRepository) StoreSession(ctx context.Context, session core.Sess
 		ExpiresAt: session.ExpiresAt,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to store session: %w", err)
+		return errs.B(err).Code(errs.Internal).Msg("failed to store session").Err()
 	}
 	// Commit
 	err = tx.Commit()
