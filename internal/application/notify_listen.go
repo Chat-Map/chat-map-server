@@ -7,7 +7,7 @@ import (
 )
 
 type NotifyListenRequest struct {
-	Address string `json:"address" validate:"required,ip"`
+	Address string `validate:"required,ip" json:"address"`
 }
 
 type NotifyListenResponse struct {

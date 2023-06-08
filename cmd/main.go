@@ -13,6 +13,17 @@ import (
 	"github.com/Chat-Map/chat-map-server/internal/application"
 )
 
+//	@title			Chatmap Server
+//	@version		1.0
+//	@description	Blazingly fast chatting server built with golang and ♥
+//
+//	@contact.email	ahmad.helaly.dev@gmail.com
+//	@contact.name	Ahmad Helaly
+
+// @securityDefinitions.apikey	bearerAuth
+// @in							header
+// @name						Authorization
+// @description				Bearer <token>
 func main() {
 	appCtx, cancel := context.WithCancel(context.Background())
 	defer cancel()

@@ -2,16 +2,16 @@ package application
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/Chat-Map/chat-map-server/internal/core"
 	"github.com/google/uuid"
+	"github.com/lordvidex/errs"
 )
 
 type SigninCommandRequest struct {
-	Email    string `validate:"required,email" json:"email"`
-	Password string `validate:"required,min=8" json:"password"`
+	Email    string `validate:"required,email"`
+	Password string `validate:"required,min=8"`
 }
 
 var (
@@ -21,7 +21,10 @@ var (
 )
 
 type SigninCommandResponse struct {
-	UserWithToken core.UserWithToken
+	User         core.User
+	AccessToken  string
+	RefreshToken string
+	ExpiresAt    time.Time
 }
 
 type SigninCommand interface {
@@ -54,7 +57,7 @@ func (s SigninCommandImplV1) Execute(ctx context.Context, params SigninCommandRe
 	// Compare passwords
 	similar := s.ph.Compare(ctx, user.Password, params.Password)
 	if !similar {
-		return SigninCommandResponse{}, fmt.Errorf("incorrect password")
+		return SigninCommandResponse{}, errs.B().Code(errs.Forbidden).Msg("incorrect password").Err()
 	}
 	// Create session
 	sessionID := uuid.New()
@@ -87,11 +90,9 @@ func (s SigninCommandImplV1) Execute(ctx context.Context, params SigninCommandRe
 	}
 
 	return SigninCommandResponse{
-		UserWithToken: core.UserWithToken{
-			User:         user,
-			AccessToken:  accessToken,
-			RefreshToken: refreshToken,
-			ExpiresAt:    time.Now().Add(accessTokenLifetime),
-		},
+		User:         user,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		ExpiresAt:    time.Now().Add(accessTokenLifetime),
 	}, nil
 }

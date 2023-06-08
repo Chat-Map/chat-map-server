@@ -16,7 +16,7 @@ func TestCreateChatCommandImplV1Execute(t *testing.T) {
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, id int64, err error)
+		check func(t *testing.T, s CreateChatCommandResponse, err error)
 	}{
 		// TODO: Add test cases.
 	}

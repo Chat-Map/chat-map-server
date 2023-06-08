@@ -3,7 +3,7 @@ version: "3.8"
 services:
   app:
     container_name: "app"
-    image: dekuyo/chatmap-server:latest
+    image: dekuyo/chatmap-server:0.0.2
     volumes:
       - ./internal/adapters/db/postgres/migrations:/internal/adapters/db/postgres/migrations
     environment:
@@ -14,6 +14,11 @@ services:
       - USER_SESSION_DURATION=${USER_SESSION_DURATION}
       - DATABASE_MIGRATION_PATH=${DATABASE_MIGRATION_PATH}
       - DATABASE_URL=${DATABASE_URL}
+
+      - SWAGGER_HOST=${SWAGGER_HOST}
+      - SWAGGER_SCHEMES=${SWAGGER_SCHEMES}
+      - SWAGGER_BASE_PATH=${SWAGGER_BASE_PATH}
+      - SWAGGER_DOCS_PATH=/docs
     ports:
       - ${APP_PORT}:${APP_PORT}
     depends_on:

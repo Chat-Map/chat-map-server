@@ -1,6 +1,8 @@
 package core
 
-import "fmt"
+import (
+	"github.com/lordvidex/errs"
+)
 
 type ContextKey string
 
@@ -9,5 +11,5 @@ var (
 )
 
 var (
-	ErrNoPayload = fmt.Errorf("no payload is set")
+	ErrNoPayload = errs.B().Code(errs.Unauthenticated).Msg("no payload is set").Err()
 )

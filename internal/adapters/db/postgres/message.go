@@ -3,10 +3,10 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/Chat-Map/chat-map-server/internal/adapters/db/postgres/sqlc"
 	"github.com/Chat-Map/chat-map-server/internal/core"
+	"github.com/lordvidex/errs"
 )
 
 type MessageRepository struct {
@@ -33,7 +33,7 @@ func (mr *MessageRepository) StoreMessage(ctx context.Context, chatID int64, mes
 		Content:  message.Content,
 	})
 	if err != nil {
-		return 0, fmt.Errorf("failed to store message: %+v", err)
+		return 0, errs.B(err).Code(errs.Internal).Msg("failed to store message").Err()
 	}
 	// Commit
 	err = tx.Commit()

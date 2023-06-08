@@ -2,10 +2,10 @@ package postgres
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
+	"github.com/lordvidex/errs"
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/postgres"
 	_ "github.com/mattes/migrate/source/file"
@@ -16,11 +16,11 @@ func New(url string) (*sql.DB, error) {
 	// Creates a new postgres conn
 	conn, err := sql.Open("postgres", url)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open postgres connection: %s", err)
+		return nil, errs.B(err).Code(errs.Internal).Msg("failed to open postgres connection").Err()
 	}
 	// Ping postgres instance
 	if err := conn.Ping(); err != nil {
-		return nil, fmt.Errorf("failed to ping postgres instance: %s", err)
+		return nil, errs.B(err).Code(errs.Unavailable).Msg("failed to ping postgres instance").Err()
 	}
 	return conn, nil
 }
@@ -30,13 +30,13 @@ func Migrate(conn *sql.DB, migrationDir string) error {
 	// Create a new pg instance
 	driver, err := postgres.WithInstance(conn, &postgres.Config{})
 	if err != nil {
-		return fmt.Errorf("failed to create driver for migration: %s", err)
+		return errs.B(err).Code(errs.Internal).Msg("failed to create driver for migration").Err()
 	}
 
 	// Load migration files
 	m, err := migrate.NewWithDatabaseInstance(migrationDir, "postgres", driver)
 	if err != nil {
-		return fmt.Errorf("failed to create new pg instance for migration: %s", err)
+		return errs.B(err).Code(errs.Internal).Msg("failed to create new pg instance for migration").Err()
 	}
 
 	// Push migration changes

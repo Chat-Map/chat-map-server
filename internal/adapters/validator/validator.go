@@ -2,9 +2,9 @@ package validator
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/lordvidex/errs"
 )
 
 type Validator struct {
@@ -25,9 +25,9 @@ func (va *Validator) Validate(_ context.Context, s any) error {
 			for i, e := range errors {
 				es[i] = e.Error()
 			}
-			return fmt.Errorf("validation errors: %v", es)
+			return errs.B().Code(errs.InvalidArgument).Msg(es...).Err()
 		} else {
-			return fmt.Errorf("validation failed: %v", err)
+			return errs.B(err).Code(errs.InvalidArgument).Msg("validation failed").Err()
 		}
 	}
 	return nil
