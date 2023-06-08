@@ -2,7 +2,9 @@
 
 Server for chat-map application
 
-## how to run 🤯
+## [Documentation 📚](http://localhost:9000/api/v1/swagger/index.html)
+
+## How to run 🤯
 
 1. Clone repository
 
