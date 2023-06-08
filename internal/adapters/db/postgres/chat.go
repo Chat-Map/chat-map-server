@@ -145,6 +145,6 @@ func convertMetadata(md sqlc.GetUserChatMetadataRow) core.ChatMetaData {
 		ID:            md.ID,
 		FirstName:     md.FirstName,
 		LastName:      md.LastName,
-		LatestMessage: md.Content,
+		LatestMessage: md.LastMessage,
 	}
 }

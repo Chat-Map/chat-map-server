@@ -24,12 +24,12 @@ func (s *Server) authMW(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		// Check authorization type
-		if strings.HasPrefix(value, authorizationType+" ") {
+		if !strings.HasPrefix(value, authorizationType+" ") {
 			newFailureResponse("authorization type not provided", errs.B().Code(errs.Unauthenticated).Err()).Write(w)
 			return
 		}
 		// Validate token
-		token := value[len(authorizationType):]
+		token := value[len(authorizationType)+1:]
 		payload, err := s.uc.ValidateToken.Execute(r.Context(), application.TokenValidateCommandRequest{Token: token})
 		if err != nil {
 			newFailureResponse("failed to execute", err).Write(w)

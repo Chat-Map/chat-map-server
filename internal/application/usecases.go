@@ -35,7 +35,7 @@ func NewUseCase(opts ...UseCaseOption) *UseCase {
 	}
 	uc.Command = Command{
 		Signin: NewSigninCommandImplV1(uc.v, uc.ur, uc.sr, uc.ph, uc.tk),
-		Signup: NewSignupCommandImplV1(uc.v, uc.ur, uc.ph, uc.Signin),
+		Signup: NewSignupCommandImplV1(uc.v, uc.ur, uc.ph),
 
 		ChatGet:    NewGetChatCommandImplV1(uc.v, uc.cr),
 		ChatCreate: NewCreateChatCommandImplV1(uc.v, uc.cr, uc.cn),
@@ -91,5 +91,11 @@ func WithValidator(v Validator) UseCaseOption {
 func WithTokenizer(t Tokenizer) UseCaseOption {
 	return func(uc *UseCase) {
 		uc.tk = t
+	}
+}
+
+func WithChatNotifier(cn ChatNotifier) UseCaseOption {
+	return func(uc *UseCase) {
+		uc.cn = cn
 	}
 }

@@ -21,11 +21,6 @@ const docTemplate = `{
     "paths": {
         "/auth/login": {
             "post": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
                 "description": "Login to user's account and get access token and refresh token",
                 "consumes": [
                     "application/json"
@@ -44,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_api.loginRequestDTO"
+                            "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.loginRequestDTO"
                         }
                     }
                 ],
@@ -54,13 +49,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/internal_api.loginResponseDTO"
+                                            "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.loginResponseDTO"
                                         }
                                     }
                                 }
@@ -72,7 +67,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -90,7 +85,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -108,7 +103,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -126,7 +121,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -144,7 +139,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -162,11 +157,6 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
                 "description": "Register a new user account with the given information",
                 "consumes": [
                     "application/json"
@@ -326,7 +316,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_api.chatCreateRequestDTO"
+                            "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatCreateRequestDTO"
                         }
                     }
                 ],
@@ -336,13 +326,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/internal_api.chatCreateResponseDTO"
+                                            "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatCreateResponseDTO"
                                         }
                                     }
                                 }
@@ -354,7 +344,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -372,7 +362,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -385,12 +375,12 @@ const docTemplate = `{
                             ]
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "409": {
+                        "description": "Conflict",
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -408,7 +398,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -431,7 +421,7 @@ const docTemplate = `{
                         "bearerAuth": []
                     }
                 ],
-                "description": "Get chat metadata for a given user(User ID is taken from the token payload)",
+                "description": "Get user's chats metadata for a given user(User ID is taken from the token payload)",
                 "consumes": [
                     "application/json"
                 ],
@@ -441,7 +431,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Get chat metadata",
+                "summary": "Get user's chats metadata",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -548,6 +538,41 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/chat/notify": {
+            "get": {
+                "description": "Notify the client when a new chat is created with him and send to connect to the room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Notify the client when a new chat is created with him",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/internal_api.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
                                         }
                                     }
                                 }
@@ -701,12 +726,12 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Get chat messages",
+                "summary": "Get a specific chat all messages",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "Chat ID",
-                        "name": "params",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -717,13 +742,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/internal_api.chatGetResponseDTO"
+                                            "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatGetResponseDTO"
                                         }
                                     }
                                 }
@@ -735,7 +760,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -753,7 +778,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -771,7 +796,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -789,7 +814,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -807,7 +832,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/internal_api.Response"
+                                    "$ref": "#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response"
                                 },
                                 {
                                     "type": "object",
@@ -823,7 +848,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/search/{pattern}": {
+        "/user/search/{pattern}": {
             "get": {
                 "security": [
                     {
@@ -845,7 +870,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "pattern",
-                        "name": "params",
+                        "name": "pattern",
                         "in": "path",
                         "required": true
                     }
@@ -1049,7 +1074,7 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
-                "user_id": {
+                "sender_id": {
                     "type": "integer"
                 }
             }
@@ -1252,7 +1277,7 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
-                "user_id": {
+                "sender_id": {
                     "type": "integer"
                 }
             }

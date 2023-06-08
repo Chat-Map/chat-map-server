@@ -106,7 +106,8 @@ const getChatUserRow = `-- name: GetChatUserRow :one
 SELECT chat_id, user_id
 FROM chat_users cu
 WHERE cu.chat_id = $1
-  AND cu.user_id = $2 LIMIT 1
+  AND cu.user_id = $2
+LIMIT 1
 `
 
 type GetChatUserRowParams struct {
@@ -125,7 +126,8 @@ const getUserChatMetadata = `-- name: GetUserChatMetadata :many
 SELECT ch.id,
        u.first_name,
        u.last_name,
-       (SELECT m.content FROM "messages" m WHERE m.id = ch.id ORDER BY m.created_at DESC LIMIT 1) AS content
+       COALESCE((SELECT m.content FROM "messages" m WHERE m.id = ch.id ORDER BY m.created_at DESC LIMIT 1),
+                '')::varchar AS last_message
 FROM "users" u
        JOIN "chat_users" cu ON u.ID = cu.user_id
        JOIN "chat" ch ON ch.id = cu.chat_id
@@ -133,10 +135,10 @@ WHERE u.id = $1
 `
 
 type GetUserChatMetadataRow struct {
-	ID        int64  `db:"id" json:"id"`
-	FirstName string `db:"first_name" json:"first_name"`
-	LastName  string `db:"last_name" json:"last_name"`
-	Content   string `db:"content" json:"content"`
+	ID          int64  `db:"id" json:"id"`
+	FirstName   string `db:"first_name" json:"first_name"`
+	LastName    string `db:"last_name" json:"last_name"`
+	LastMessage string `db:"last_message" json:"last_message"`
 }
 
 func (q *Queries) GetUserChatMetadata(ctx context.Context, db DBTX, id int64) ([]GetUserChatMetadataRow, error) {
@@ -152,7 +154,7 @@ func (q *Queries) GetUserChatMetadata(ctx context.Context, db DBTX, id int64) ([
 			&i.ID,
 			&i.FirstName,
 			&i.LastName,
-			&i.Content,
+			&i.LastMessage,
 		); err != nil {
 			return nil, err
 		}

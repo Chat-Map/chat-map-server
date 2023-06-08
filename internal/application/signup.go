@@ -23,30 +23,29 @@ type SignupCommandResponse struct {
 }
 
 type SignupCommand interface {
-	Execute(ctx context.Context, params SignupCommandRequest) (SignupCommandResponse, error)
+	Execute(ctx context.Context, params SignupCommandRequest) error
 }
 
 type SignupCommandImplV1 struct {
 	ur UserRepository
 	ph PasswordHasher
 	v  Validator
-	in SigninCommand
 }
 
-func NewSignupCommandImplV1(v Validator, ur UserRepository, ph PasswordHasher, in SigninCommand) SignupCommand {
-	return SignupCommandImplV1{v: v, ur: ur, ph: ph, in: in}
+func NewSignupCommandImplV1(v Validator, ur UserRepository, ph PasswordHasher) SignupCommand {
+	return SignupCommandImplV1{v: v, ur: ur, ph: ph}
 }
 
-func (s SignupCommandImplV1) Execute(ctx context.Context, params SignupCommandRequest) (SignupCommandResponse, error) {
+func (s SignupCommandImplV1) Execute(ctx context.Context, params SignupCommandRequest) error {
 	// Validate
 	err := s.v.Validate(ctx, params)
 	if err != nil {
-		return SignupCommandResponse{}, err
+		return err
 	}
 	// Hash password
 	hashedPassword, err := s.ph.Hash(ctx, params.Password)
 	if err != nil {
-		return SignupCommandResponse{}, err
+		return err
 	}
 	// Store user
 	err = s.ur.StoreUser(ctx, core.User{
@@ -57,19 +56,10 @@ func (s SignupCommandImplV1) Execute(ctx context.Context, params SignupCommandRe
 		Password:  hashedPassword,
 	})
 	if err != nil {
-		return SignupCommandResponse{}, err
+		return err
 	}
-	response, err := s.in.Execute(ctx, SigninCommandRequest{
-		Email:    params.Email,
-		Password: params.Password,
-	})
 	if err != nil {
-		return SignupCommandResponse{}, err
+		return err
 	}
-	return SignupCommandResponse{
-		User:         response.User,
-		AccessToken:  response.AccessToken,
-		RefreshToken: response.RefreshToken,
-		ExpiresAt:    response.ExpiresAt,
-	}, nil
+	return nil
 }

@@ -43,9 +43,9 @@ func (s CreateChatCommandImplV1) Execute(ctx context.Context, params CreateChatC
 	if err != nil {
 		return CreateChatCommandResponse{}, err
 	}
-	// Notify users about newly created chat
-	go func() {
-		s.cn.Notify(ctx, userIDs, chatID)
-	}()
+	// TODO: Notify users about newly created chat
+	// go func() {
+	// 	s.cn.Notify(ctx, userIDs, chatID)
+	// }()
 	return CreateChatCommandResponse{ChatID: chatID}, nil
 }

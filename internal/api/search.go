@@ -32,15 +32,19 @@ func (searchResponseDTO) from(x application.SearchCommandResponse) []searchRespo
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			params		path		string	true	"pattern"
+//	@Param			pattern		path		string	true	"pattern"
 //	@Success		200			{object}	api.Response{data=[]searchResponseDTO}
 //	@Failure		400,401,500	{object}	api.Response{data=interface{}}
 //	@Security		bearerAuth
-//	@Router			/search/{pattern} [get]
+//	@Router			/user/search/{pattern} [get]
 func (s *Server) search(w http.ResponseWriter, r *http.Request) {
 	// Get pattern from var
 	vars := mux.Vars(r)
 	pattern := vars["pattern"]
+	if pattern == "" {
+		newFailureResponse("failed to parse pattern parameter", nil).Write(w)
+		return
+	}
 	// Do request
 	usersBySearch, err := s.uc.SearchUserByAll.Execute(r.Context(), application.SearchCommandRequest{Pattern: pattern})
 	if err != nil {

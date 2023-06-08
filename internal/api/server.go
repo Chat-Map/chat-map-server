@@ -41,8 +41,8 @@ func (s *Server) setup() {
 
 	// Chat
 	r.HandleFunc("/chat", s.authMW(s.chatCreate)).Methods("POST")
-	r.HandleFunc("/chat/{id}", s.authMW(s.chatGet)).Methods("GET")
 	r.HandleFunc("/chat/meta", s.authMW(s.chatGetMeta)).Methods("GET")
+	r.HandleFunc("/chat/{id}", s.authMW(s.chatGet)).Methods("GET")
 
 	// Chat (websockets & sse)
 	r.HandleFunc("/chat/ws/{id}", s.authMW(s.chatws)).Methods("GET")

@@ -92,10 +92,10 @@ func (q *Queries) GetUserByID(ctx context.Context, db DBTX, id int64) (User, err
 const searchUserByAll = `-- name: SearchUserByAll :many
 SELECT id, first_name, last_name, phone, email
 FROM users
-WHERE email LIKE $1::varchar+'%'
-   OR first_name LIKE $1::varchar+'%'
-   OR last_name LIKE $1::varchar+'%'
-   OR phone LIKE $1::varchar+'%'
+WHERE email LIKE $1
+   OR first_name LIKE $1
+   OR last_name LIKE $1
+   OR phone LIKE $1
 `
 
 type SearchUserByAllRow struct {
@@ -106,8 +106,8 @@ type SearchUserByAllRow struct {
 	Email     string `db:"email" json:"email"`
 }
 
-func (q *Queries) SearchUserByAll(ctx context.Context, db DBTX, pattern string) ([]SearchUserByAllRow, error) {
-	rows, err := db.QueryContext(ctx, searchUserByAll, pattern)
+func (q *Queries) SearchUserByAll(ctx context.Context, db DBTX, email string) ([]SearchUserByAllRow, error) {
+	rows, err := db.QueryContext(ctx, searchUserByAll, email)
 	if err != nil {
 		return nil, err
 	}

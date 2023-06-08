@@ -42,7 +42,6 @@ func (loginResponseDTO) from(x application.SigninCommandResponse) loginResponseD
 //	@Param			body				body		loginRequestDTO	true	"User ID"
 //	@Success		200					{object}	api.Response{data=loginResponseDTO}
 //	@Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
-//	@Security		bearerAuth
 //	@Router			/auth/login [post]
 func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 	var body loginRequestDTO
