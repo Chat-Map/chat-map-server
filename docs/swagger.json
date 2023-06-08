@@ -1,0 +1,21 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Blazingly fast chatting server built with golang and ♥",
+        "title": "Chatmap Server",
+        "contact": {
+            "name": "Ahmad Helaly",
+            "email": "ahmad.helaly.dev@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "paths": {},
+    "securityDefinitions": {
+        "bearerAuth": {
+            "description": "Bearer \u003ctoken\u003e",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+info:
+  contact:
+    email: ahmad.helaly.dev@gmail.com
+    name: Ahmad Helaly
+  description: Blazingly fast chatting server built with golang and ♥
+  title: Chatmap Server
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  bearerAuth:
+    description: Bearer <token>
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
