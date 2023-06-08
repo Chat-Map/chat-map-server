@@ -21,6 +21,18 @@ func (chatCreateResponseDTO) from(x application.CreateChatCommandResponse) chatC
 	return chatCreateResponseDTO{ChatID: x.ChatID}
 }
 
+// ChatCreate godoc
+//
+//	@Summary		Create a private chat
+//	@Description	Create a private chat with a given userID
+//	@Tags			chat
+//	@Accept			json
+//	@Produce		json
+//	@Param			body			body		chatCreateRequestDTO	true	"User ID"
+//	@Success		200				{object}	api.Response{data=chatCreateResponseDTO}
+//	@Failure		400,401,409,500	{object}	api.Response{data=interface{}}
+//	@Security		bearerAuth
+//	@Router			/chat [post]
 func (s *Server) chatCreate(w http.ResponseWriter, r *http.Request) {
 	var body chatCreateRequestDTO
 	// Read body

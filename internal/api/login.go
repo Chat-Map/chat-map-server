@@ -32,6 +32,18 @@ func (loginResponseDTO) from(x application.SigninCommandResponse) loginResponseD
 	}
 }
 
+// Login godoc
+//
+//	@Summary		Login to user's account
+//	@Description	Login to user's account and get access token and refresh token
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			body				body		loginRequestDTO	true	"User ID"
+//	@Success		200					{object}	api.Response{data=loginResponseDTO}
+//	@Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
+//	@Security		bearerAuth
+//	@Router			/auth/login [post]
 func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 	var body loginRequestDTO
 	// Read body

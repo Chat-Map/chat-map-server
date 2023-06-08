@@ -20,7 +20,7 @@ type room struct {
 
 type message struct {
 	ChatID  int64  `json:"chat_id"`
-	UserID  int64  `json:"user_id"`
+	UserID  int64  `json:"sender_id"`
 	Content string `json:"content"`
 }
 
@@ -46,6 +46,18 @@ func (s *Server) storeMessage(chatID int64, message message) (int64, error) {
 	})
 }
 
+// ChatWS godoc
+//
+//	@Summary		Connect to chat room with websockets
+//	@Description	Conncects the user to the chat room to get notified of new messages
+//	@Tags			chat
+//	@Accept			json
+//	@Produce		json
+//	@Param			params				path		int64	true	"Chat ID"
+//	@Success		200					{object}	message
+//	@Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
+//	@Security		bearerAuth
+//	@Router			/chat/ws/{id} [get]
 func (s *Server) chatws(w http.ResponseWriter, r *http.Request) {
 	// Get chatID from var
 	vars := mux.Vars(r)

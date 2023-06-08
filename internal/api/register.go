@@ -35,6 +35,18 @@ func (registerResponseDTO) from(x application.SignupCommandResponse) registerRes
 	}
 }
 
+// Register godoc
+//
+//	@Summary		Register a new user account
+//	@Description	Register a new user account with the given information
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			body				body		registerRequestDTO	true	"User ID"
+//	@Success		200					{object}	api.Response{data=registerResponseDTO}
+//	@Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
+//	@Security		bearerAuth
+//	@Router			/auth/register [post]
 func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 	var body registerRequestDTO
 	// Read body

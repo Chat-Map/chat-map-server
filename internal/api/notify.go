@@ -8,6 +8,15 @@ import (
 	"github.com/Chat-Map/chat-map-server/internal/application"
 )
 
+// Register godoc
+//
+//	@Summary		Notify the client when a new chat is created with him
+//	@Description Notify the client when a new chat is created with him and send to connect to the room
+//	@Tags			chat
+//	@Accept			json
+//	@Produce		json
+//	@Success		200					{object}	api.Response{data=int64}
+//	@Router			/chat/notify [get]
 func (s *Server) notify(w http.ResponseWriter, r *http.Request) {
 	// Set the response headers for SSE
 	w.Header().Set("Content-Type", "text/event-stream")

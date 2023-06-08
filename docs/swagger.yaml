@@ -1,3 +1,249 @@
+definitions:
+  github_com_Chat-Map_chat-map-server_internal_api.Response:
+    properties:
+      data: {}
+      error: {}
+      message:
+        description: Success bool        `json:"success"`
+        type: string
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.chatCreateRequestDTO:
+    properties:
+      user_id:
+        type: integer
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.chatCreateResponseDTO:
+    properties:
+      chat_id:
+        type: integer
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.chatGetMessage:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      sender_id:
+        type: integer
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.chatGetResponseDTO:
+    properties:
+      id:
+        type: integer
+      messages:
+        items:
+          $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatGetMessage'
+        type: array
+      user_ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.chatMetaGetResponseDTO:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      latest_message:
+        type: string
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.loginRequestDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.loginResponseDTO:
+    properties:
+      access_token:
+        type: string
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_core.User'
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.message:
+    properties:
+      chat_id:
+        type: integer
+      content:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.registerRequestDTO:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.registerResponseDTO:
+    properties:
+      access_token:
+        type: string
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_core.User'
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_api.searchResponseDTO:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+    type: object
+  github_com_Chat-Map_chat-map-server_internal_core.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_api.Response:
+    properties:
+      data: {}
+      error: {}
+      message:
+        description: Success bool        `json:"success"`
+        type: string
+    type: object
+  internal_api.chatCreateRequestDTO:
+    properties:
+      user_id:
+        type: integer
+    type: object
+  internal_api.chatCreateResponseDTO:
+    properties:
+      chat_id:
+        type: integer
+    type: object
+  internal_api.chatGetMessage:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      sender_id:
+        type: integer
+    type: object
+  internal_api.chatGetResponseDTO:
+    properties:
+      id:
+        type: integer
+      messages:
+        items:
+          $ref: '#/definitions/internal_api.chatGetMessage'
+        type: array
+      user_ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  internal_api.chatMetaGetResponseDTO:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      latest_message:
+        type: string
+    type: object
+  internal_api.loginRequestDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_api.loginResponseDTO:
+    properties:
+      access_token:
+        type: string
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_core.User'
+    type: object
+  internal_api.message:
+    properties:
+      chat_id:
+        type: integer
+      content:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  internal_api.registerRequestDTO:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+    type: object
+  internal_api.registerResponseDTO:
+    properties:
+      access_token:
+        type: string
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_core.User'
+    type: object
+  internal_api.searchResponseDTO:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+    type: object
 info:
   contact:
     email: ahmad.helaly.dev@gmail.com
@@ -5,7 +251,488 @@ info:
   description: Blazingly fast chatting server built with golang and ♥
   title: Chatmap Server
   version: "1.0"
-paths: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to user's account and get access token and refresh token
+      parameters:
+      - description: User ID
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api.loginRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/internal_api.loginResponseDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Login to user's account
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user account with the given information
+      parameters:
+      - description: User ID
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api.registerRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/internal_api.registerResponseDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Register a new user account
+      tags:
+      - auth
+  /chat:
+    post:
+      consumes:
+      - application/json
+      description: Create a private chat with a given userID
+      parameters:
+      - description: User ID
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api.chatCreateRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/internal_api.chatCreateResponseDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Create a private chat
+      tags:
+      - chat
+  /chat/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get chat messages for a given chat ID
+      parameters:
+      - description: Chat ID
+        in: path
+        name: params
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/internal_api.chatGetResponseDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Get chat messages
+      tags:
+      - chat
+  /chat/meta:
+    get:
+      consumes:
+      - application/json
+      description: Get chat metadata for a given user(User ID is taken from the token
+        payload)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/internal_api.chatMetaGetResponseDTO'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Get chat metadata
+      tags:
+      - chat
+  /chat/ws/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Conncects the user to the chat room to get notified of new messages
+      parameters:
+      - description: Chat ID
+        in: path
+        name: params
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_api.message'
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Connect to chat room with websockets
+      tags:
+      - chat
+  /search/{pattern}:
+    get:
+      consumes:
+      - application/json
+      description: Search for a user in the system with a given pattern
+      parameters:
+      - description: pattern
+        in: path
+        name: params
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.searchResponseDTO'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Search for a user in the system
+      tags:
+      - user
 securityDefinitions:
   bearerAuth:
     description: Bearer <token>

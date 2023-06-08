@@ -25,6 +25,18 @@ func (searchResponseDTO) from(x application.SearchCommandResponse) []searchRespo
 	return res
 }
 
+// SearchUser godoc
+//
+//	@Summary		Search for a user in the system
+//	@Description	Search for a user in the system with a given pattern
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			params		path		string	true	"pattern"
+//	@Success		200			{object}	api.Response{data=[]searchResponseDTO}
+//	@Failure		400,401,500	{object}	api.Response{data=interface{}}
+//	@Security		bearerAuth
+//	@Router			/search/{pattern} [get]
 func (s *Server) search(w http.ResponseWriter, r *http.Request) {
 	// Get pattern from var
 	vars := mux.Vars(r)

@@ -33,20 +33,20 @@ func (s *Server) setup() {
 	r = r.PathPrefix("/api/v1").Subrouter()
 
 	// Register
-	r.HandleFunc("/register", s.register).Methods("POST")
-	r.HandleFunc("/login", s.login).Methods("POST")
+	r.HandleFunc("/auth/register", s.register).Methods("POST")
+	r.HandleFunc("/auth/login", s.login).Methods("POST")
 
-	// Notify
-	r.HandleFunc("/notify", s.notify).Methods("GET")
-
-	// Search
-	r.HandleFunc("/search/{pattern}", s.authMW(s.search)).Methods("GET") // Search for User/Group/Channel
+	// User
+	r.HandleFunc("/user/search/{pattern}", s.authMW(s.search)).Methods("GET") // Search for User/Group/Channel
 
 	// Chat
 	r.HandleFunc("/chat", s.authMW(s.chatCreate)).Methods("POST")
 	r.HandleFunc("/chat/{id}", s.authMW(s.chatGet)).Methods("GET")
-	r.HandleFunc("/chat/ws/{id}", s.authMW(s.chatws)).Methods("GET")
 	r.HandleFunc("/chat/meta", s.authMW(s.chatGetMeta)).Methods("GET")
+
+	// Chat (websockets & sse)
+	r.HandleFunc("/chat/ws/{id}", s.authMW(s.chatws)).Methods("GET")
+	r.HandleFunc("/chat/notify", s.notify).Methods("GET")
 
 	s.r = r
 }
