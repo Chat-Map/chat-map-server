@@ -16,10 +16,10 @@ WHERE email = $1;
 -- name: SearchUserByAll :many
 SELECT id, first_name, last_name, phone, email
 FROM users
-WHERE email LIKE sqlc.arg(pattern)::varchar+'%'
-   OR first_name LIKE sqlc.arg(pattern)::varchar+'%'
-   OR last_name LIKE sqlc.arg(pattern)::varchar+'%'
-   OR phone LIKE sqlc.arg(pattern)::varchar+'%';
+WHERE email LIKE $1
+   OR first_name LIKE $1
+   OR last_name LIKE $1
+   OR phone LIKE $1;
 
 -- name: GetAllUsers :many
 SELECT id,

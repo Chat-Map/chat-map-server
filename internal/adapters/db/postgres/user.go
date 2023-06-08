@@ -97,7 +97,7 @@ func (ur *UserRepository) SearchUserByAll(ctx context.Context, pattern string) (
 	}
 	defer rollback(tx)
 	// Do
-	rows, err := ur.q.SearchUserByAll(ctx, tx, pattern)
+	rows, err := ur.q.SearchUserByAll(ctx, tx, pattern+"%") // % is a wildcard that matches any number of characters
 	if err != nil {
 		return nil, errs.B(err).Code(errs.Internal).Msg("failed to search for users").Err()
 	}
