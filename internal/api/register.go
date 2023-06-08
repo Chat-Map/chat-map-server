@@ -26,7 +26,7 @@ type registerResponseDTO struct {
 	ExpiresAt    time.Time `json:"expires_at"`
 }
 
-func (registerResponseDTO) from(x application.SignupCommandResponse) registerResponseDTO {
+func (registerResponseDTO) from(x application.SigninCommandResponse) registerResponseDTO {
 	return registerResponseDTO{
 		User:         x.User,
 		AccessToken:  x.AccessToken,
@@ -67,7 +67,7 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Do request
-	response, err := s.uc.Signup.Execute(s.ctx, application.SignupCommandRequest{
+	err = s.uc.Signup.Execute(s.ctx, application.SignupCommandRequest{
 		FirstName: body.FirstName,
 		LastName:  body.LastName,
 		Phone:     body.Phone,
@@ -78,6 +78,14 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 		newFailureResponse("failed to execute signup", err).Write(w)
 		return
 	}
+	res, err := s.uc.Signin.Execute(s.ctx, application.SigninCommandRequest{
+		Email:    body.Email,
+		Password: body.Password,
+	})
+	if err != nil {
+		newFailureResponse("failed to execute signin", err).Write(w)
+		return
+	}
 	// Write response
-	newSuccessResponse("registered", new(registerResponseDTO).from(response)).Write(w)
+	newSuccessResponse("registered", new(registerResponseDTO).from(res)).Write(w)
 }

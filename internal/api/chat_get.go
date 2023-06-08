@@ -41,16 +41,16 @@ func (chatGetResponseDTO) from(x application.GetChatCommandResponse) chatGetResp
 
 // ChatGet godoc
 //
-// @Summary		Get a specific chat all messages
-// @Description	Get chat messages for a given chat ID
-// @Tags			chat
-// @Accept			json
-// @Produce		json
-// @Param			params				path		int64	true	"Chat ID"
-// @Success		200					{object}	api.Response{data=chatGetResponseDTO}
-// @Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
-// @Security		bearerAuth
-// @Router			/chat/{id} [get]
+//	@Summary		Get a specific chat all messages
+//	@Description	Get chat messages for a given chat ID
+//	@Tags			chat
+//	@Accept			json
+//	@Produce		json
+//	@Param			id					path		int64	true	"Chat ID"
+//	@Success		200					{object}	api.Response{data=chatGetResponseDTO}
+//	@Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
+//	@Security		bearerAuth
+//	@Router			/chat/{id} [get]
 func (s *Server) chatGet(w http.ResponseWriter, r *http.Request) {
 	// Get chatID from var
 	vars := mux.Vars(r)

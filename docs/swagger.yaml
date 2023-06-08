@@ -76,7 +76,7 @@ definitions:
         type: integer
       content:
         type: string
-      user_id:
+      sender_id:
         type: integer
     type: object
   github_com_Chat-Map_chat-map-server_internal_api.registerRequestDTO:
@@ -208,7 +208,7 @@ definitions:
         type: integer
       content:
         type: string
-      user_id:
+      sender_id:
         type: integer
     type: object
   internal_api.registerRequestDTO:
@@ -263,7 +263,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_api.loginRequestDTO'
+          $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.loginRequestDTO'
       produces:
       - application/json
       responses:
@@ -271,16 +271,16 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/internal_api.loginResponseDTO'
+                  $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.loginResponseDTO'
               type: object
         "400":
           description: Bad Request
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -289,7 +289,7 @@ paths:
           description: Unauthorized
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -298,7 +298,7 @@ paths:
           description: Forbidden
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -307,7 +307,7 @@ paths:
           description: Not Found
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -316,13 +316,11 @@ paths:
           description: Internal Server Error
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
               type: object
-      security:
-      - bearerAuth: []
       summary: Login to user's account
       tags:
       - auth
@@ -395,8 +393,6 @@ paths:
                 data:
                   type: object
               type: object
-      security:
-      - bearerAuth: []
       summary: Register a new user account
       tags:
       - auth
@@ -411,7 +407,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_api.chatCreateRequestDTO'
+          $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatCreateRequestDTO'
       produces:
       - application/json
       responses:
@@ -419,16 +415,16 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/internal_api.chatCreateResponseDTO'
+                  $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatCreateResponseDTO'
               type: object
         "400":
           description: Bad Request
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -437,16 +433,16 @@ paths:
           description: Unauthorized
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
               type: object
-        "404":
-          description: Not Found
+        "409":
+          description: Conflict
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -455,7 +451,7 @@ paths:
           description: Internal Server Error
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -473,7 +469,7 @@ paths:
       parameters:
       - description: Chat ID
         in: path
-        name: params
+        name: id
         required: true
         type: integer
       produces:
@@ -483,16 +479,16 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/internal_api.chatGetResponseDTO'
+                  $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.chatGetResponseDTO'
               type: object
         "400":
           description: Bad Request
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -501,7 +497,7 @@ paths:
           description: Unauthorized
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -510,7 +506,7 @@ paths:
           description: Forbidden
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -519,7 +515,7 @@ paths:
           description: Not Found
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
@@ -528,22 +524,22 @@ paths:
           description: Internal Server Error
           schema:
             allOf:
-            - $ref: '#/definitions/internal_api.Response'
+            - $ref: '#/definitions/github_com_Chat-Map_chat-map-server_internal_api.Response'
             - properties:
                 data:
                   type: object
               type: object
       security:
       - bearerAuth: []
-      summary: Get chat messages
+      summary: Get a specific chat all messages
       tags:
       - chat
   /chat/meta:
     get:
       consumes:
       - application/json
-      description: Get chat metadata for a given user(User ID is taken from the token
-        payload)
+      description: Get user's chats metadata for a given user(User ID is taken from
+        the token payload)
       produces:
       - application/json
       responses:
@@ -605,7 +601,28 @@ paths:
               type: object
       security:
       - bearerAuth: []
-      summary: Get chat metadata
+      summary: Get user's chats metadata
+      tags:
+      - chat
+  /chat/notify:
+    get:
+      consumes:
+      - application/json
+      description: Notify the client when a new chat is created with him and send
+        to connect to the room
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/internal_api.Response'
+            - properties:
+                data:
+                  type: integer
+              type: object
+      summary: Notify the client when a new chat is created with him
       tags:
       - chat
   /chat/ws/{id}:
@@ -676,7 +693,7 @@ paths:
       summary: Connect to chat room with websockets
       tags:
       - chat
-  /search/{pattern}:
+  /user/search/{pattern}:
     get:
       consumes:
       - application/json
@@ -684,7 +701,7 @@ paths:
       parameters:
       - description: pattern
         in: path
-        name: params
+        name: pattern
         required: true
         type: string
       produces:
