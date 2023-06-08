@@ -16,7 +16,7 @@ func TestSignupCommandImplV1Execute(t *testing.T) {
 	tests := []struct {
 		name  string
 		args  args
-		check func(t *testing.T, res SignupCommandResponse, err error)
+		check func(t *testing.T, err error)
 	}{
 		// TODO: Add test cases.
 	}
@@ -29,14 +29,11 @@ func TestSignupCommandImplV1Execute(t *testing.T) {
 			v := mock.NewMockValidator(ctrl)
 			ur := mock.NewMockUserRepository(ctrl)
 			ph := mock.NewMockPasswordHasher(ctrl)
-			sr := mock.NewMockSessionsRepository(ctrl)
-			tk := mock.NewMockTokenizer(ctrl)
 
-			signin := NewSigninCommandImplV1(v, ur, sr, ph, tk)
-			signup := NewSignupCommandImplV1(v, ur, ph, signin)
+			signup := NewSignupCommandImplV1(v, ur, ph)
 
-			res, err := signup.Execute(context.TODO(), tt.args.params)
-			tt.check(t, res, err)
+			err := signup.Execute(context.TODO(), tt.args.params)
+			tt.check(t, err)
 		})
 	}
 }
