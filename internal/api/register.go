@@ -45,7 +45,6 @@ func (registerResponseDTO) from(x application.SignupCommandResponse) registerRes
 //	@Param			body				body		registerRequestDTO	true	"User ID"
 //	@Success		200					{object}	api.Response{data=registerResponseDTO}
 //	@Failure		400,401,403,404,500	{object}	api.Response{data=interface{}}
-//	@Security		bearerAuth
 //	@Router			/auth/register [post]
 func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 	var body registerRequestDTO
